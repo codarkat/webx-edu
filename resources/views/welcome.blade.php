@@ -123,7 +123,7 @@
                                     $question_types = ['CHOICE', 'FORM', 'MULTIPLE_CHOICE'];
                                 @endphp
                                 <div class="form-floating mb-3">
-                                    <select class="form-select" id="js-question-type">
+                                    <select class="form-select" id="question-type">
                                         <option selected>Select type of question</option>
                                         @foreach($question_types as $qt)
                                             <option value="{{$qt}}">{{$qt}}</option>
@@ -157,14 +157,14 @@
 
         function check(){
             if($('#question-content').val() == ""
-                || $('#js-question-type option:selected').val() == "Select type of question"
+                || $('#question-type option:selected').val() == "Select type of question"
             ){
                 alert('Vui lòng điền đầy đủ thông tin')
             } else {
                 let formData = new FormData();
                 formData.append('content', $('#question-content').val())
-                formData.append('type', $('#js-question-type option:selected').val())
-                if($('#js-question-type option:selected').val() == 'FORM'){
+                formData.append('type', $('#question-type option:selected').val())
+                if($('#question-type option:selected').val() == 'FORM'){
                     if($('#answer_text').val() == ""){
                         alert('Vui lòng điền đáp án')
                     } else {
@@ -174,7 +174,7 @@
                         // }
                         let data = {
                             content: $('#question-content').val(),
-                            type: $('#js-question-type option:selected').val(),
+                            type: $('#question-type option:selected').val(),
                             answer: $('#answer_text').val()
                         }
                         // const index = [1, 2, 3, 4]
@@ -185,7 +185,7 @@
                         // data['option_answer'] = optionAnswer;
                         ajaxAddQuestion(data)
                     }
-                } else if ($('#js-question-type option:selected').val() == 'CHOICE') {
+                } else if ($('#question-type option:selected').val() == 'CHOICE') {
                     let answer1 = $("#answer-"+1).val()
                     let answer2 = $("#answer-"+2).val()
                     let answer3 = $("#answer-"+3).val()
@@ -209,7 +209,7 @@
                             } else {
                                 let data = {
                                     content: $('#question-content').val(),
-                                    type: $('#js-question-type option:selected').val(),
+                                    type: $('#question-type option:selected').val(),
                                     answer: $("input[name='answer']:checked").val()
                                 }
                                 const index = [1, 2, 3, 4]
@@ -246,7 +246,7 @@
                             } else {
                                 let data = {
                                     content: $('#question-content').val(),
-                                    type: $('#js-question-type option:selected').val(),
+                                    type: $('#question-type option:selected').val(),
                                     answer: $("#answer-"+$("input[name='answer']:checked").val()).val()
                                 }
                                 let arrayAnswer = [];
@@ -285,8 +285,8 @@
 
 
         //Get option anwser via DOM -> id js-answer
-        $('#js-question-type').change(function (){
-            if($('#js-question-type option:selected').val() == 'MULTIPLE_CHOICE'){
+        $('#question-type').change(function (){
+            if($('#question-type option:selected').val() == 'MULTIPLE_CHOICE'){
                 $('#js-answer').html(`
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
@@ -313,7 +313,7 @@
                                         <input type="text" class="form-control" id="answer-4" placeholder="Answer 4">
                                     </div>
                 `)
-            } else if ($('#js-question-type option:selected').text() == 'CHOICE'){
+            } else if ($('#question-type option:selected').text() == 'CHOICE'){
                 $('#js-answer').html(`
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
@@ -340,7 +340,7 @@
                                         <input type="text" class="form-control" id="answer-4" placeholder="Answer 4">
                                     </div>
                 `)
-            } else if ($('#js-question-type option:selected').text() == 'FORM') {
+            } else if ($('#question-type option:selected').text() == 'FORM') {
                 $('#js-answer').html(`
                     <div class="mb-3">
                         <label for="answer_text" class="form-label">Answer</label>
@@ -354,18 +354,6 @@
                     </div>
                 `)
             }
-
-            //Check answer radio checked
-            $(".js-radio-answer").change(function (){
-                if($(this).is(':checked')){
-                    $(".js-radio-answer").parent().css({
-                        "backgroundColor": "#e9ecef"
-                    })
-                    $(this).parent().css({
-                        "backgroundColor": "green"
-                    })
-                }
-            })
         })
 
 

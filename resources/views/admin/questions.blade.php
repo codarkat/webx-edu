@@ -1,9 +1,14 @@
 @extends('layouts.main-layout')
 
 @section('content')
-    <div class="page-description">
-        <h1>{{$topic->name}}</h1>
-        <span>{{$topic->description}}</span>
+    <div class="page-description d-flex align-items-center">
+        <div class="page-description-content flex-grow-1">
+            <h1>{{$topic->name}}</h1>
+            <span>{{$topic->description}}</span>
+        </div>
+        <div class="page-description-actions">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-create-question"><i class="material-icons">add</i>Tạo câu hỏi mới</button>
+        </div>
     </div>
     <div class="card">
         <div class="card-header">
@@ -21,61 +26,94 @@
                 </tr>
                 </thead>
                 <tbody>
-{{--                @foreach($questions as $index=>$q)--}}
-{{--                    <tr>--}}
-{{--                        <td>{{$q->content}}</td>--}}
-{{--                        <td>System Architect</td>--}}
-{{--                        <td>Edinburgh</td>--}}
-{{--                        <td>61</td>--}}
-{{--                        <td>2011/04/25</td>--}}
-{{--                        <td>$320,800</td>--}}
-{{--                    </tr>--}}
-{{--                @endforeach--}}
+                {{--JS Datatable--}}
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="modal fade" id="modal-edit-question" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-edit-question" tabindex="-1" aria-labelledby="ModalEditLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa câu hỏi</h5>
+                    <h5 class="modal-title">Chỉnh sửa câu hỏi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="" class="database_operation">
-
                         {{ csrf_field()}}
-
+                        <input type="hidden" class="form-control" id="e-question-id">
                         <div class="mb-3">
-                            <label for="question-content" class="form-label">Question</label>
-                            <textarea class="form-control" rows="4" placeholder="Add content" id="question-content"></textarea>
+                            <label for="e-question-content" class="form-label">Nội dung câu hỏi</label>
+                            <textarea class="form-control" rows="4" placeholder="Gõ nội dung" id="e-question-content"></textarea>
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <label class="visually-hidden" for="js-question-type">Type</label>
+                                <label class="visually-hidden" for="e-question-type">Loại câu hỏi</label>
                                 <div class="input-group">
-                                    <div class="input-group-text">Type</div>
-                                    <input type="text" class="form-control" id="js-question-type" readonly>
+                                    <div class="input-group-text">Loại câu hỏi</div>
+                                    <input type="text" class="form-control" id="e-question-type" readonly>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <label class="visually-hidden" for="question-status">Status</label>
-                                <select class="form-select" id="question-status">
+                                <label class="visually-hidden" for="e-question-status">Trạng thái</label>
+                                <select class="form-select" id="e-question-status">
                                     <option value="ACTIVE">ACTIVE</option>
                                     <option value="INACTIVE">INACTIVE</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="bg-light rounded-3 p-4 mt-3 mb-3" id="js-answer">
+                        <div class="bg-light rounded-3 p-4 mt-3 mb-3" id="e-answer">
                             {{--JS_ANWSER--}}
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer mb-3">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-primary" onclick="updateQuestion()">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-create-question" tabindex="-1" aria-labelledby="ModalEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm câu hỏi mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" class="database_operation">
+                        {{ csrf_field()}}
+                        <input type="hidden" class="form-control" id="topic-id" value="{{$topic->id}}">
+                        <div class="mb-3">
+                            <label for="question-content" class="form-label">Nội dung câu hỏi</label>
+                            <textarea class="form-control" rows="4" placeholder="Gõ nội dung" id="question-content"></textarea>
+                        </div>
+                        @php
+                            $question_types = ['CHOICE', 'FORM', 'MULTIPLE_CHOICE'];
+                        @endphp
+                        <div class="mb-3">
+                            <label for="question-type" class="form-label">Loại câu hỏi</label>
+                            <select class="form-select" id="question-type">
+                                <option selected>Chọn loại của câu hỏi</option>
+                                @foreach($question_types as $qt)
+                                    <option value="{{$qt}}">{{$qt}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="bg-light rounded-3 p-4 mt-3 mb-3" id="answer">
+                            {{--JS_ANWSER--}}
+                            <div class="text-center">
+                                Loại của câu hỏi chưa được chọn!
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer mb-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="createQuestion()">Tạo</button>
                 </div>
             </div>
         </div>
@@ -84,18 +122,20 @@
 @section('script')
     <script>
 
-        let table;
+        let table, row_clicked;
         let body = $('body');
 
         //Listen event onclick from button edit
         body.on('click', '.ajax-edit-question', function () {
+            row_clicked = $(this).parents('tr');
             let id = $(this).data("id");
-            let url = '{{ route("question.ajax-get-a-question", ":id") }}';
+            let url = '{{ route("question.ajax-get-question", ":id") }}';
             url = url.replace(':id', id );
             $.get(url, function (data) {
-                $("#question-content").val(data.question.content);
-                $('#js-question-type').val(data.question.type);
-                $("#question-status").val(data.question.status).change();
+                $('#e-question-content').val(data.question.content);
+                $('#e-question-type').val(data.question.type);
+                $('#e-question-status').val(data.question.status).change();
+                $('#e-question-id').val(id);
                 if(data.question.type === 'MULTIPLE_CHOICE'){
                     let html = ``;
                     let objectAnswers = JSON.parse(data.answer.option_answer);
@@ -106,25 +146,25 @@
                             html += `
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 js-checkbox-answer" id="checkbox-`+ index +`" name="answer" type="checkbox" value="`+ index +`" aria-label="Checkbox button for answer">
+                                            <input class="form-check-input mt-0 js-e-checkbox-answer" id="e-checkbox-`+ index +`" name="e-answer" type="checkbox" value="`+ index +`" aria-label="Checkbox button for answer">
                                         </div>
-                                        <input type="text" class="form-control" id="answer-`+ index +`" value="`+ answer +`">
+                                        <input type="text" class="form-control" id="e-option-answer-`+ index +`" value="`+ answer +`">
                                     </div>
                             `;
                         } else {
                             html += `
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 js-checkbox-answer" id="checkbox-`+ index +`" name="answer" type="checkbox" value="`+ index +`" aria-label="Checkbox button for answer">
+                                            <input class="form-check-input mt-0 js-e-checkbox-answer" id="e-checkbox-`+ index +`" name="e-answer" type="checkbox" value="`+ index +`" aria-label="Checkbox button for answer">
                                         </div>
-                                        <input type="text" class="form-control" id="answer-`+ index +`" value="`+ answer +`">
+                                        <input type="text" class="form-control" id="e-option-answer-`+ index +`" value="`+ answer +`">
                                     </div>
                             `;
                         }
                     })
-                    $('#js-answer').html(html)
+                    $('#e-answer').html(html)
                     $.each(arrayAnswers, function(index, answer) {
-                        $('#checkbox-'+answer).prop('checked', true);
+                        $('#e-checkbox-'+answer).prop('checked', true);
                     })
                 } else if (data.question.type === 'CHOICE'){
                     let html = ``;
@@ -136,29 +176,29 @@
                             html += `
                                     <div class="input-group">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 js-radio-answer" id="radio-`+ index +`" name="answer" type="radio" value="`+ index +`" aria-label="Radio button for answer">
+                                            <input class="form-check-input mt-0 js-e-radio-answer" id="e-radio-`+ index +`" name="e-answer" type="radio" value="`+ index +`" aria-label="Radio button for answer">
                                         </div>
-                                        <input type="text" class="form-control" id="answer-`+ index +`" value="`+ answer +`">
+                                        <input type="text" class="form-control" id="e-option-answer-`+ index +`" value="`+ answer +`">
                                     </div>
                             `;
                         } else {
                             html += `
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                            <input class="form-check-input mt-0 js-radio-answer" id="radio-`+ index +`" name="answer" type="radio" value="`+ index +`" aria-label="Radio button for answer">
+                                            <input class="form-check-input mt-0 js-e-radio-answer" id="e-radio-`+ index +`" name="e-answer" type="radio" value="`+ index +`" aria-label="Radio button for answer">
                                         </div>
-                                        <input type="text" class="form-control" id="answer-`+ index +`" value="`+ answer +`">
+                                        <input type="text" class="form-control" id="e-option-answer-`+ index +`" value="`+ answer +`">
                                     </div>
                             `;
                         }
                     })
-                    $('#js-answer').html(html)
-                    $('#radio-'+answer).prop('checked', true);
+                    $('#e-answer').html(html)
+                    $('#e-radio-'+answer).prop('checked', true);
                 } else if (data.question.type === 'FORM') {
-                    $('#js-answer').html(`
+                    $('#e-answer').html(`
                         <div class="mb-3">
-                            <label for="answer_text" class="form-label">Answer</label>
-                            <input type="text" class="form-control" id="answer_text" name="answer_text" value="`+ data.answer.answer +`">
+                            <label for="e-answer_text" class="form-label">Answer</label>
+                            <input type="text" class="form-control" id="e-answer_text" name="e-answer_text" value="`+ data.answer.answer +`">
                         </div>
                     `)
                 }
@@ -166,6 +206,7 @@
         });
         //Listen event onclick from button delete
         body.on('click', '.ajax-delete-question', function () {
+            row_clicked = $(this).parents('tr');
             Swal.fire({
                 title: 'Bạn có chắc không?',
                 text: "Câu hỏi sẽ bị xóa.",
@@ -189,7 +230,7 @@
                         success:function(data){
                             if(Boolean(data.code)){
                                 table
-                                    .row($(this).parents('tr'))
+                                    .row(row_clicked)
                                     .remove()
                                     .draw();
                                 Swal.fire(
@@ -214,6 +255,9 @@
         //Get data for table
         $(function () {
             table = $('#questions-datatable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/vi.json'
+                },
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('question.ajax-get-list-questions')}}",
@@ -231,5 +275,432 @@
                 ]
             });
         });
+
+        function updateQuestion(){
+            if($('#e-question-content').val() == ""){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Vui lòng điền nội dung câu hỏi!'
+                })
+            } else {
+                let id = $('#e-question-id').val();
+                let content = $('#e-question-content').val();
+                let type = $('#e-question-type').val();
+                let status = $('#e-question-status option:selected').val();
+                if($('#e-question-type').val() == 'FORM'){
+                    if($('#e-answer_text').val() == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Vui lòng điền đáp án!'
+                        })
+                    } else {
+                        let data = {
+                            id: id,
+                            content: content,
+                            type: type,
+                            status: status,
+                            answer: $('#e-answer_text').val()
+                        }
+                        ajaxUpdateQuestion(data)
+                    }
+                } else if ($('#e-question-type').val() == 'CHOICE') {
+                    let answer1 = $("#e-option-answer-"+1).val()
+                    let answer2 = $("#e-option-answer-"+2).val()
+                    let answer3 = $("#e-option-answer-"+3).val()
+                    let answer4 = $("#e-option-answer-"+4).val()
+                    if(answer1 == ""
+                        || answer2 == ""
+                        || answer3 == ""
+                        || answer4 == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Các đáp án không được trống!'
+                        })
+                    } else {
+                        if(answer1 === answer2
+                            || answer1 === answer3
+                            || answer1 === answer4
+                            || answer2 === answer3
+                            || answer2 === answer4
+                            || answer3 === answer4){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Các đáp án không được trùng lặp!'
+                            })
+                        } else {
+                            if(!$(".js-e-radio-answer").is(':checked')){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Bạn cần chọn đáp án cho câu hỏi!'
+                                })
+                            } else {
+                                let data = {
+                                    id: id,
+                                    content: content,
+                                    type: type,
+                                    status: status,
+                                    answer: $("input[name='e-answer']:checked").val()
+                                }
+                                const index = [1, 2, 3, 4]
+                                let optionAnswer = {};
+                                for (const i of index) {
+                                    optionAnswer[i] = $('#e-option-answer-'+i).val()
+                                }
+                                data['option_answer'] = optionAnswer;
+                                ajaxUpdateQuestion(data)
+                            }
+                        }
+                    }
+                } else if ($('#e-question-type').val() == 'MULTIPLE_CHOICE') {
+                    let answer1 = $('#e-option-answer-'+1).val()
+                    let answer2 = $('#e-option-answer-'+2).val()
+                    let answer3 = $('#e-option-answer-'+3).val()
+                    let answer4 = $('#e-option-answer-'+4).val()
+                    if(answer1 == ""
+                        || answer2 == ""
+                        || answer3 == ""
+                        || answer4 == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Các đáp án không được trống!'
+                        })
+                    } else {
+                        if (answer1 === answer2
+                            || answer1 === answer3
+                            || answer1 === answer4
+                            || answer2 === answer3
+                            || answer2 === answer4
+                            || answer3 === answer4) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Các đáp án không được trùng lặp!'
+                            })
+                        } else {
+                            if (!$('.js-e-checkbox-answer').is(':checked')) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Bạn cần chọn đáp án cho câu hỏi!'
+                                })
+                            } else {
+                                let data = {
+                                    id: id,
+                                    content: content,
+                                    type: type,
+                                    status: status
+                                }
+                                let arrayAnswer = [];
+                                let optionAnswer = {};
+                                const index = [1, 2, 3, 4];
+                                //Store correct answer
+                                $("input:checkbox[name=e-answer]:checked").each(function () {
+                                    arrayAnswer.push($(this).val());
+                                });
+                                //Store answer option
+                                for (const i of index) {
+                                    optionAnswer[i] = $('#e-option-answer-'+i).val()
+                                }
+                                data['answer'] = arrayAnswer;
+                                data['option_answer'] = optionAnswer;
+                                ajaxUpdateQuestion(data);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function ajaxUpdateQuestion(data) {
+            let url = '{{route("question.update")}}';
+            data['_token'] = '{{csrf_token()}}';
+            $.ajax({
+                type:'POST',
+                url:url,
+                data: data,
+                success:function(data){
+                    if(Boolean(data.code)){
+                        //Get old data
+                        let rowData = table.row(row_clicked).data();
+                        //Update new data
+                        rowData[1] = data.content;
+                        rowData[2] = data.type;
+                        rowData[3] = data.status;
+                        //Update row
+                        table
+                            .row(row_clicked)
+                            .data(rowData)
+                            .draw();
+                        //Alert success
+                        Swal.fire(
+                            'Thành công!',
+                            'Câu hỏi đã được cập nhật.',
+                            'success'
+                        )
+                        //Hide modal
+                        let modalUpdateQuestion = document.getElementById('modal-edit-question');
+                        let modalUQ = bootstrap.Modal.getInstance(modalUpdateQuestion);
+                        modalUQ.hide();
+
+                    } else {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Câu hỏi xóa không thành công.',
+                            'error'
+                        )
+                    }
+                }
+            });
+        }
+
+
+        //CREATE QUESTION
+        function createQuestion(){
+            if($('#question-content').val() == ""
+                || $('#question-type option:selected').val() == "Select type of question"
+            ){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Vui lòng điền nội dung câu hỏi!'
+                })
+            } else {
+                let content = $('#question-content').val();
+                let type = $('#question-type').val();
+                let topic_id = $('#topic-id').val();
+                if($('#question-type option:selected').val() == 'FORM'){
+                    if($('#answer_text').val() == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Vui lòng điền đáp án!'
+                        })
+                    } else {
+                        let data = {
+                            content: content,
+                            type: type,
+                            topic_id: topic_id,
+                            answer: $('#answer_text').val()
+                        }
+                        console.log(data);
+                        ajaxCreateQuestion(data)
+                    }
+                } else if ($('#question-type option:selected').val() == 'CHOICE') {
+                    let answer1 = $("#option-answer-"+1).val()
+                    let answer2 = $("#option-answer-"+2).val()
+                    let answer3 = $("#option-answer-"+3).val()
+                    let answer4 = $("#option-answer-"+4).val()
+                    if(answer1 == ""
+                        || answer2 == ""
+                        || answer3 == ""
+                        || answer4 == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Các đáp án không được trống!'
+                        })
+                    } else {
+                        if(answer1 === answer2
+                            || answer1 === answer3
+                            || answer1 === answer4
+                            || answer2 === answer3
+                            || answer2 === answer4
+                            || answer3 === answer4){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Các đáp án không được trùng lặp!'
+                            })
+                        } else {
+                            if(!$(".js-radio-answer").is(':checked')){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Bạn cần chọn đáp án cho câu hỏi!'
+                                })
+                            } else {
+                                let data = {
+                                    content: content,
+                                    type: type,
+                                    topic_id: topic_id,
+                                    answer: $("input[name='answer']:checked").val()
+                                }
+                                const index = [1, 2, 3, 4]
+                                let optionAnswer = {};
+                                for (const i of index) {
+                                    optionAnswer[i] = $("#option-answer-"+i).val()
+                                }
+                                data['option_answer'] = optionAnswer;
+                                ajaxCreateQuestion(data)
+                            }
+                        }
+                    }
+                } else if ($('#question-type option:selected').val() == 'MULTIPLE_CHOICE') {
+                    let answer1 = $("#option-answer-"+1).val()
+                    let answer2 = $("#option-answer-"+2).val()
+                    let answer3 = $("#option-answer-"+3).val()
+                    let answer4 = $("#option-answer-"+4).val()
+                    if(answer1 == ""
+                        || answer2 == ""
+                        || answer3 == ""
+                        || answer4 == ""){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Các đáp án không được trống!'
+                        })
+                    } else {
+                        if (answer1 === answer2
+                            || answer1 === answer3
+                            || answer1 === answer4
+                            || answer2 === answer3
+                            || answer2 === answer4
+                            || answer3 === answer4) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Các đáp án không được trùng lặp!'
+                            })
+                        } else {
+                            if (!$(".js-checkbox-answer").is(':checked')) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Bạn cần chọn đáp án cho câu hỏi!'
+                                })
+                            } else {
+                                let data = {
+                                    content: content,
+                                    type: type,
+                                    topic_id: topic_id,
+                                }
+                                let arrayAnswer = [];
+                                let optionAnswer = {};
+                                const index = [1, 2, 3, 4];
+                                $("input:checkbox[name=answer]:checked").each(function () {
+                                    arrayAnswer.push($(this).val());
+                                });
+                                for (const i of index) {
+                                    optionAnswer[i] = $("#option-answer-"+i).val()
+                                }
+                                data['answer'] = arrayAnswer;
+                                data['option_answer'] = optionAnswer;
+                                ajaxCreateQuestion(data);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function ajaxCreateQuestion(data) {
+            let url = '{{route("question.create")}}';
+            data['_token'] = '{{csrf_token()}}';
+            console.log(data);
+            $.ajax({
+                type:'POST',
+                url:url,
+                data: data,
+                success:function(data){
+                    if(Boolean(data.code)){
+                        let rowData = table.row( ':last').data();
+                        rowData[0] = rowData.DT_RowIndex + 1;
+                        rowData[1] = data.content;
+                        rowData[2] = data.type;
+                        rowData[3] = data.status;
+                        rowData[4] = data.action;
+                        table.row.add(rowData).draw();
+                        Swal.fire(
+                            'Thành công!',
+                            'Câu hỏi đã được tạo.',
+                            'success'
+                        )
+
+                        //Hide modal
+                        let modalCreateQuestion = document.getElementById('modal-create-question');
+                        let modalCQ = bootstrap.Modal.getInstance(modalCreateQuestion);
+                        modalCQ.hide();
+
+                    } else {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Câu hỏi không được tạo.',
+                            'error'
+                        )
+                    }
+                }
+            });
+        }
+
+        $('#question-type').change(function (){
+            let index = [1, 2, 3, 4];
+            if($('#question-type option:selected').val() == 'MULTIPLE_CHOICE'){
+                let html = ``;
+                $.each(index, function(index, value) {
+                    if(Number(value) === Number(index.length)){
+                        html += `
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 js-checkbox-answer" name="answer" type="checkbox" value="`+ value +`" aria-label="Checkbox button for following text input">
+                                        </div>
+                                        <input type="text" class="form-control" id="option-answer-`+ value +`" placeholder="Đáp án `+ value +`">
+                                    </div>
+                        `;
+                    } else {
+                        html += `
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 js-checkbox-answer" name="answer" type="checkbox" value="`+ value +`" aria-label="Checkbox button for following text input">
+                                        </div>
+                                        <input type="text" class="form-control" id="option-answer-`+ value +`" placeholder="Đáp án `+ value +`">
+                                    </div>
+                        `;
+                    }
+                });
+                $('#answer').html(html);
+            } else if ($('#question-type option:selected').text() == 'CHOICE'){
+                let html = ``;
+                $.each(index, function(index, value) {
+                    if(Number(value) === Number(index.length)){
+                        html += `
+                                    <div class="input-group">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 js-radio-answer" name="answer" type="radio" value="`+ value +`" aria-label="Radio button for following text input">
+                                        </div>
+                                        <input type="text" class="form-control" id="option-answer-`+ value +`" placeholder="Đáp án `+ value +`">
+                                    </div>
+                        `;
+                    } else {
+                        html += `
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0 js-radio-answer" name="answer" type="radio" value="`+ value +`" aria-label="Radio button for following text input">
+                                        </div>
+                                        <input type="text" class="form-control" id="option-answer-`+ value +`" placeholder="Đáp án `+ value +`">
+                                    </div>
+                        `;
+                    }
+                });
+                $('#answer').html(html);
+            } else if ($('#question-type option:selected').text() == 'FORM') {
+                $('#answer').html(`
+                    <div class="mb-3">
+                        <label for="answer_text" class="form-label">Đáp án</label>
+                        <input type="text" class="form-control" id="answer_text" name="answer_text" placeholder="Chỉ viết thường, đúng chính tả">
+                    </div>
+                `)
+            } else {
+                $('#answer').html(`
+                            <div class="text-center">
+                                Loại của câu hỏi chưa được chọn!
+                            </div>
+                `)
+            }
+        })
     </script>
 @endsection

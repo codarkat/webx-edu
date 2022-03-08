@@ -34,6 +34,11 @@ Route::post(
     [QuestionController::class, 'createQuestion']
 )->name('question.create');
 
+Route::post(
+    '/question-update',
+    [QuestionController::class, 'updateQuestion']
+)->name('question.update');
+
 Route::get(
     '/admin_questions',
     [QuestionController::class, 'adminGetQuestions']
@@ -45,9 +50,9 @@ Route::get(
 )->name('question.ajax-get-list-questions');
 
 Route::get(
-    '/ajax-get-a-question/{id}',
-    [QuestionController::class, 'ajaxGetAQuestion']
-)->name('question.ajax-get-a-question');
+    '/ajax-get-question/{id}',
+    [QuestionController::class, 'ajaxGetQuestion']
+)->name('question.ajax-get-question');
 
 Route::post(
     '/ajax-delete-question',
