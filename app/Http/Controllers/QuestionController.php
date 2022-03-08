@@ -48,7 +48,6 @@ class QuestionController extends Controller
                         'action' => $action,
                         'type' => $request->input('type')
                     ]);
-                    return response()->json(['code' => 1]);
                 } else {
                     return response()->json(['code' => 0]);
                 }
