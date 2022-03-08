@@ -5,6 +5,7 @@
         <div class="page-description-content flex-grow-1">
             <h1>{{$topic->name}}</h1>
             <span>{{$topic->description}}</span>
+            <input type="hidden" class="form-control" id="topic-id" value="{{$topic->id}}">
         </div>
         <div class="page-description-actions">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-create-question"><i class="material-icons">add</i>Tạo câu hỏi mới</button>
@@ -76,7 +77,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-create-question" tabindex="-1" aria-labelledby="ModalEditLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-create-question" tabindex="-1" aria-labelledby="ModalCreateLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -86,7 +87,6 @@
                 <div class="modal-body">
                     <form action="" class="database_operation">
                         {{ csrf_field()}}
-                        <input type="hidden" class="form-control" id="topic-id" value="{{$topic->id}}">
                         <div class="mb-3">
                             <label for="question-content" class="form-label">Nội dung câu hỏi</label>
                             <textarea class="form-control" rows="4" placeholder="Gõ nội dung" id="question-content"></textarea>
@@ -129,7 +129,7 @@
         body.on('click', '.ajax-edit-question', function () {
             row_clicked = $(this).parents('tr');
             let id = $(this).data("id");
-            let url = '{{ route("question.ajax-get-question", ":id") }}';
+            let url = '{{ route("question.get-question", ":id") }}';
             url = url.replace(':id', id );
             $.get(url, function (data) {
                 $('#e-question-content').val(data.question.content);
@@ -219,7 +219,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     let id = $(this).data("id");
-                    let url = '{{route("question.ajax-delete-question")}}';
+                    let url = '{{route("question.delete")}}';
                     $.ajax({
                         type:'POST',
                         url:url,
@@ -247,20 +247,22 @@
                             }
                         }
                     });
-
                 }
             })
         });
 
         //Get data for table
         $(function () {
+            let id = $('#topic-id').val();
+            let url = '{{ route("topic.get-topic-details", ":id") }}';
+            url = url.replace(':id', id );
             table = $('#questions-datatable').DataTable({
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/vi.json'
                 },
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('question.ajax-get-list-questions')}}",
+                ajax: url,
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'content', name: 'content'},
@@ -599,7 +601,7 @@
         }
 
         function ajaxCreateQuestion(data) {
-            let url = '{{route("question.create")}}';
+            let url = '{{route("question.store")}}';
             data['_token'] = '{{csrf_token()}}';
             console.log(data);
             $.ajax({
@@ -608,13 +610,24 @@
                 data: data,
                 success:function(data){
                     if(Boolean(data.code)){
-                        let rowData = table.row( ':last').data();
-                        rowData[0] = rowData.DT_RowIndex + 1;
-                        rowData[1] = data.content;
-                        rowData[2] = data.type;
-                        rowData[3] = data.status;
-                        rowData[4] = data.action;
-                        table.row.add(rowData).draw();
+
+                        if(table.row( ':last').data()){
+                            let rowData = table.row( ':last').data();
+                            rowData[0] = rowData.DT_RowIndex + 1;
+                            rowData[1] = data.content;
+                            rowData[2] = data.type;
+                            rowData[3] = data.status;
+                            rowData[4] = data.action;
+                            table.row.add(rowData).draw();
+                        } else {
+                            table.row.add({
+                                'DT_RowIndex': 1,
+                                'content': data.content,
+                                'type': data.type,
+                                'status': data.status,
+                                'action': data.action,
+                            }).draw();
+                        }
                         Swal.fire(
                             'Thành công!',
                             'Câu hỏi đã được tạo.',

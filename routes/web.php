@@ -1,6 +1,11 @@
 <?php
+
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,10 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get(
-    '/questions',
-    [QuestionController::class, 'getQuestions']
-)->name('question.all');
+
 
 Route::post(
     '/result-create',
@@ -29,32 +31,87 @@ Route::post(
 )->name('result.create');
 
 
-Route::post(
-    '/question-create',
-    [QuestionController::class, 'createQuestion']
-)->name('question.create');
 
-Route::post(
-    '/question-update',
-    [QuestionController::class, 'updateQuestion']
-)->name('question.update');
+//Topic
+Route::prefix('topic')->name('topic.')->group(function () {
+    Route::post(
+        '/store',
+        [TopicController::class, 'store']
+    )->name('store');
+    Route::post(
+        '/update',
+        [TopicController::class, 'update']
+    )->name('update');
+    Route::post(
+        '/delete',
+        [TopicController::class, 'delete']
+    )->name('delete');
 
-Route::get(
-    '/admin_questions',
-    [QuestionController::class, 'adminGetQuestions']
-)->name('question.admin_all');
+    Route::get(
+        '/get-topic/{id}',
+        [TopicController::class, 'getTopic']
+    )->name('get-topic');
 
-Route::get(
-    '/ajax-get-list-questions',
-    [QuestionController::class, 'ajaxGetListQuestions']
-)->name('question.ajax-get-list-questions');
+    Route::get(
+        '/get-topic-details/{id}',
+        [TopicController::class, 'getTopicDetails']
+    )->name('get-topic-details');
+});
 
-Route::get(
-    '/ajax-get-question/{id}',
-    [QuestionController::class, 'ajaxGetQuestion']
-)->name('question.ajax-get-question');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get(
+        'dashboard',
+        [AdminController::class, 'dashboard']
+    )->name('dashboard');
 
-Route::post(
-    '/ajax-delete-question',
-    [QuestionController::class, 'deleteQuestion']
-)->name('question.ajax-delete-question');
+    Route::get(
+        '/topic-details/topic-id-{id}',
+        [AdminController::class, 'topicDetails']
+    )->name('topic-details');
+});
+
+Route::prefix('user')->name('user.')->group(function () {
+    Route::get(
+        '/exam/exam-id-{id}',
+        [UserController::class, 'exam']
+    )->name('exam');
+
+    Route::get(
+        '/topics',
+        [UserController::class, 'topics']
+    )->name('topics');
+});
+
+
+Route::prefix('question')->name('question.')->group(function () {
+    Route::post(
+        '/store',
+        [QuestionController::class, 'store']
+    )->name('store');
+
+    Route::post(
+        '/update',
+        [QuestionController::class, 'update']
+    )->name('update');
+
+    Route::post(
+        '/delete',
+        [QuestionController::class, 'delete']
+    )->name('delete');
+    Route::get(
+        '/get-question/{id}',
+        [QuestionController::class, 'getQuestion']
+    )->name('get-question');
+});
+
+Route::prefix('subscribe')->name('subscribe.')->group(function () {
+    Route::post(
+        '/store',
+        [SubscribeController::class, 'store']
+    )->name('store');
+
+    Route::post(
+        '/delete',
+        [SubscribeController::class, 'delete']
+    )->name('delete');
+});

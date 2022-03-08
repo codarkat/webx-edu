@@ -20,6 +20,7 @@
     <link href="{{asset('assets/plugins/pace/pace.css')}}" rel="stylesheet">
     <link href="{{asset('assets/plugins/highlight/styles/github-gist.css')}}" rel="stylesheet">
     <link href="{{asset('assets/plugins/datatables/datatables.min.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/plugins/flatpickr/flatpickr.min.css')}}" rel="stylesheet">
 
 
     <!-- Theme Styles -->

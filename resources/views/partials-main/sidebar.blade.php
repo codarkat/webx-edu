@@ -12,10 +12,10 @@
     <div class="app-menu">
         <ul class="accordion-menu">
             <li>
-                <a href=""><i class="material-icons-two-tone">dashboard</i>Dashboard</a>
+                <a href="{{route('admin.dashboard')}}"><i class="material-icons-two-tone">dashboard</i>Dashboard</a>
             </li>
             <li>
-                <a href=""><i class="material-icons-two-tone">description</i>Kiểm tra</a>
+                <a href="{{route('user.topics')}}"><i class="material-icons-two-tone">description</i>Kiểm tra</a>
             </li>
             <li>
                 <a href=""><i class="material-icons-two-tone">emoji_events</i>Kết quả</a>
