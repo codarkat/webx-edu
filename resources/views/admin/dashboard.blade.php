@@ -1,4 +1,4 @@
-@extends('layouts.main-layout')
+@extends('layouts.admin-layout')
 
 @section('content')
     <div class="page-description d-flex align-items-center">
@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <div class="widget-popular-blog-container">
                         <div class="widget-popular-blog-image">
-                            <img src="{{asset('assets/images/mirea.png')}}" alt="">
+                            <img src="{{asset('public/assets/images/mirea.png')}}" alt="">
                         </div>
                         <div class="widget-popular-blog-content ps-4">
                             <div class="row">
@@ -258,7 +258,7 @@
                                     <div class="card-body">
                                         <div class="widget-popular-blog-container">
                                             <div class="widget-popular-blog-image">
-                                                <img src="{{asset('assets/images/mirea.png')}}" alt="">
+                                                <img src="{{asset('public/assets/images/mirea.png')}}" alt="">
                                             </div>
                                             <div class="widget-popular-blog-content ps-4">
                                                             <div class="row">

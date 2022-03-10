@@ -1,4 +1,4 @@
-@extends('layouts.main-layout')
+@extends('layouts.admin-layout')
 
 @section('content')
     <div class="page-description d-flex align-items-center">

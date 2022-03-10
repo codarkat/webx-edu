@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Result;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 class ResultController extends Controller
 {
@@ -27,7 +29,11 @@ class ResultController extends Controller
 
     public function check(Request $request){
         $result = Result::where('user_id', Auth::user()->id)->where('topic_id', $request->input('topic_id'))->first();
-        return response()->json(['status' => $result->status]);
+        if($result != null){
+            return response()->json(['status' => $result->status]);
+        } else {
+            return response()->json(['status' => null]);
+        }
     }
 
     public function update(Request $request){
@@ -109,8 +115,6 @@ class ResultController extends Controller
                     'answer'=> $answer,
                     'isCorrect' => $isCorrect
                 ]);
-
-                //echo 'MULTIPLE_CHOICE';
             }
         }
         $result_user = Result::where('user_id', Auth::user()->id)->where('topic_id', $request->input('topic_id'))->first();
@@ -118,12 +122,68 @@ class ResultController extends Controller
         $result_user->num_incorrect = $num_incorrect;
         $result_user->result = json_encode($result);
         $result_user->status = 'FINISHED';
-        $result_user->save();
-        echo(json_encode($result_user));
+        if($result_user->save()){
+            return redirect()->route('user.list-results');
+        }else{
+            return abort(404);
+        }
     }
 
     public function getResult(Request $request){
-        $result = Result::where('topic_id',$request->input('topic_id'))->where('user_id',Auth::user()->id)->first();
+        if($request->input('user_id') !== null){
+            $result = Result::where('topic_id',$request->input('topic_id'))->where('user_id',$request->input('user_id'))->first();
+        } else {
+            $result = Result::where('topic_id',$request->input('topic_id'))->where('user_id',Auth::user()->id)->first();
+        }
         return response()->json(['result' => $result]);
+    }
+
+    public function getAll(Request $request){
+        if ($request->ajax()) {
+            $results = Result::where('status', 'FINISHED')->get();
+            return Datatables::of($results)
+                ->addIndexColumn()
+                ->editColumn('name', function($result){
+                    return $result->user->name;
+                })
+                ->editColumn('topic', function ($result) {
+                    return $result->topic->name;
+                })
+                ->addColumn('action', function($result){
+                    return '
+                            <a type="button" class="btn btn-warning ajax-view-result" data-topic-id="'.$result->topic_id.'" data-user-id="'.$result->user_id.'"><i class="material-icons">visibility</i>Xem kết quả</a>
+
+                    ';
+                })
+                ->rawColumns(['name', 'topic', 'action'])
+                ->make(true);
+        }
+    }
+
+    public function getUserResults(Request $request, $user_id){
+        if ($request->ajax()) {
+            $results = Result::where('status', 'FINISHED')->where('user_id', $user_id)->get();
+            return Datatables::of($results)
+                ->addIndexColumn()
+                ->editColumn('topic', function ($result) {
+                    return $result->topic->name;
+                })
+                ->addColumn('action', function($result){
+                    return '
+                            <a type="button" class="btn btn-warning ajax-view-result" data-topic-id="'.$result->topic_id.'" data-user-id="'.$result->user_id.'"><i class="material-icons">visibility</i>Xem kết quả</a>
+
+                    ';
+                })
+                ->rawColumns(['topic', 'action'])
+                ->make(true);
+        }
+    }
+
+    public function getClock($topic_id){
+        $result = Result::where('topic_id',$topic_id)->where('user_id',Auth::user()->id)->first();
+        $topic = Topic::find($topic_id);
+        $create_at = $result->created_at;
+        $clock = date('Y-m-d H:i:s', strtotime($create_at. ' +'.$topic->duration.' minutes'));
+        return response()->json(['clock' => $clock]);
     }
 }

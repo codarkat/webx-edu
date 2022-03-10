@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <div class="widget-popular-blog-container">
                         <div class="widget-popular-blog-image">
-                            <img src="{{asset('assets/images/mirea.png')}}" alt="">
+                            <img src="{{asset('public/assets/images/mirea.png')}}" alt="">
                         </div>
                         <div class="widget-popular-blog-content ps-4">
                             <div class="row">
@@ -32,7 +32,7 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill @if($topic->status == \App\Enums\StatusEnum::ACTIVE) badge-success @else badge-danger @endif" id="topic-status-{{$topic->id}}">{{$topic->status}}</span></li>
                                         <li class="list-group-item">Số lượng câu hỏi: <span class="badge badge-style-light rounded-pill badge-info" id="topic-num-question-{{$topic->id}}">{{$topic->num_question}}</span></li>
-                                        <li class="list-group-item">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
+                                        <li class="list-group-item" id="clock-{{$topic->id}}">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -55,6 +55,8 @@
                                 <a type="button" class="btn btn-info js-continue-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Tiếp tục làm bài</a>
                             @elseif(in_array($topic->id, $results_finished))
                                 <a type="button" class="btn btn-info js-result-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Kết quả</a>
+                            @elseif(in_array($topic->id, $results_expired))
+                                <a type="button" class="btn btn-danger"><i class="material-icons">report_off</i>Không hoàn thành bài kiểm tra</a>
                             @else
                                 <a type="button" class="btn btn-info js-start-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Bắt đầu làm bài</a>
                             @endif
@@ -67,7 +69,7 @@
                     <div class="card-body">
                         <div class="widget-popular-blog-container">
                             <div class="widget-popular-blog-image">
-                                <img src="{{asset('assets/images/mirea.png')}}" alt="">
+                                <img src="{{asset('public/assets/images/mirea.png')}}" alt="">
                             </div>
                             <div class="widget-popular-blog-content ps-4">
                                 <div class="row">
@@ -85,7 +87,7 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill @if($topic->status == \App\Enums\StatusEnum::ACTIVE) badge-success @else badge-danger @endif" id="topic-status-{{$topic->id}}">{{$topic->status}}</span></li>
                                             <li class="list-group-item">Số lượng câu hỏi: <span class="badge badge-style-light rounded-pill badge-info" id="topic-num-question-{{$topic->id}}">{{$topic->num_question}}</span></li>
-                                            <li class="list-group-item">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
+                                            <li class="list-group-item" id="clock-{{$topic->id}}">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -310,6 +312,58 @@
 
         })
 
+        function clock(topic_id){
+            let url = '{{ route("result.get-clock", ":id") }}';
+            url = url.replace(':id', topic_id );
+            $.get(url, function (data) {
+                console.log(data.clock)
+                $('#clock-'+topic_id).countdown(data.clock, function(event) {
+                    var $this = $(this).html(event.strftime('Thời gian còn lại: <span class="btn btn-warning btn-style-light">'
+                        // + '<span>%H</span> giờ '
+                        // + '<span>%M</span> phút '
+                        // + '<span>%S</span> giây'
+                        + '<span>%N</span>:'
+                        + '<span>%S</span>'
+                        + '</span>'
+                    ))
+                    if(event.offset.totalSeconds < 11){
+                        $('.clock').addClass('bg-countdown-red')
+                    };
+                }).on('finish.countdown', function (){
+                    let footerButtons = `
+                                    <a type="button" class="btn btn-dark js-unsubscribe-disable" data-topic-id="`+ topic_id +`" data-user-id="{{Auth::user()->id}}"><i class="material-icons">clear</i>Hủy đăng ký</a>
+                                    <a type="button" class="btn btn-danger"><i class="material-icons">report_off</i>Không hoàn thành bài kiểm tra</a>
+                                `;
+                    $('#footer-button-' + topic_id).html(footerButtons);
+                });
+            })
+        }
+
+        function topicsClock(){
+            let url = '{{ route("topic.get-active-topics") }}';
+            $.get(url, function (data) {
+                $.each(data.topics, function( index, value ) {
+                    let topic_id = value.id;
+                    $.ajax({
+                        type:'POST',
+                        url: '{{route('result.check')}}',
+                        data: {
+                            topic_id: topic_id,
+                            _token: '{{csrf_token()}}'
+                        },
+                        success:function(data){
+                            if(data.status === 'PROCESSING'){
+                                clock(topic_id);
+                            } else if (data.status === 'FINISHED'){
+                                $('#clock-'+topic_id).html(`<span class="btn btn-success btn-style-light">Đã hoàn thành</span>`)
+                            }
+                        }
+                    });
+                });
+            })
+        }
+
+        topicsClock();
 
     </script>
 @endsection

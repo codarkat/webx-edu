@@ -9,9 +9,9 @@
     </div>
     <div class="app-auth-container">
         <div class="logo mb-5">
-            <a href="{{route('index')}}"><strong>MIREA</strong>VN</a>
+            <a href="{{route('admin.login')}}"><strong>MIREA</strong>VN <span class="text-danger"> ADMIN</span></a>
         </div>
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('admin.check') }}">
             @csrf
 
             <div class="auth-credentials m-b-xxl">

@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\StatusEnum;
 use App\Models\Answer;
 use App\Models\Question;
+use App\Models\Result;
+use App\Models\Subscribe;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class TopicController extends Controller
@@ -77,6 +80,14 @@ class TopicController extends Controller
         $topic = Topic::where('id',$id)->first();
         return response()->json([
             'topic' =>$topic
+        ]);
+    }
+
+    public function activeTopics(){
+        $topics = Topic::where('status', StatusEnum::ACTIVE)
+            ->where('num_question', '>', 0)->get();
+        return response()->json([
+            'topics' =>$topics
         ]);
     }
 

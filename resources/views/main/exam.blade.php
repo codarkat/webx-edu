@@ -5,7 +5,6 @@
         <h1>{{$topic->name}}</h1>
         <span>{{$topic->description}}</span>
     </div>
-    <div id="clock"></div>
     <form action="{{route('result.update')}}" method="POST" id="form-answer">
         {{ csrf_field()}}
         <input type="hidden" id="topic_id" name="topic_id" value="{{$topic->id}}">
@@ -85,22 +84,38 @@
 @endsection
 @section('script')
 <script>
-    $('#clock').countdown('2022-03-10 03:41', function(event) {
-        var $this = $(this).html(event.strftime(''
-            // + '<span>%H</span> giờ '
-            // + '<span>%M</span> phút '
-            // + '<span>%S</span> giây'
-            + '<span>%N</span> phút '
-            + '<span>%S</span> giây'
-        )).on('finish.countdown', function (){
-            return Swal.fire(
-                'Lỗi',
-                'Bạn đã nộp bài.',
-                'error'
-            );
-        });
+    $('.app-menu').append(`
+        <div class="clock text-dark text-center">
+            <h1 id="clock" class="mt-3"></h1>
+            <p class="">Thời gian làm bài</p>
+        </div>
+    `);
+    function clock(){
+        let topic_id = $('#topic_id').val();
+        let url = '{{ route("result.get-clock", ":id") }}';
+        url = url.replace(':id', topic_id );
+        $.get(url, function (data) {
+            console.log(data.clock)
+            $('#clock').countdown(data.clock, function(event) {
+                var $this = $(this).html(event.strftime(''
+                    // + '<span>%H</span> giờ '
+                    // + '<span>%M</span> phút '
+                    // + '<span>%S</span> giây'
+                    + '<span>%N</span>:'
+                    + '<span>%S</span>'
+                ))
+                if(event.offset.totalSeconds < 11){
+                    $('.clock').addClass('bg-countdown-red')
+                };
+            }).on('finish.countdown', function (){
+                sendSubmit();
+            });
+        })
+    }
 
-    });
+    clock();
+
+
     let body = $('body');
     body.on('click', '.js-finish-exam', function () {
         Swal.fire({
@@ -114,30 +129,34 @@
             confirmButtonText: 'Okay, nộp bài!'
         }).then((result) => {
             if (result.isConfirmed) {
-                let topic_id = $('#topic_id').val();
-                let user_id = $('#user_id').val();
-                $.ajax({
-                    type:'POST',
-                    url: '{{route('result.check')}}',
-                    data: {
-                        topic_id: topic_id,
-                        user_id: user_id,
-                        _token: '{{csrf_token()}}'
-                    },
-                    success:function(data){
-                        if(data.status === 'PROCESSING'){
-                            $('#form-answer').submit();
-                        } else if(data.status === 'FINISHED'){
-                            Swal.fire(
-                                'Lỗi',
-                                'Bạn đã nộp bài.',
-                                'error'
-                            )
-                        }
-                    }
-                });
+                sendSubmit();
             }
         });
     })
+
+    function sendSubmit(){
+        let topic_id = $('#topic_id').val();
+        let user_id = $('#user_id').val();
+        $.ajax({
+            type:'POST',
+            url: '{{route('result.check')}}',
+            data: {
+                topic_id: topic_id,
+                user_id: user_id,
+                _token: '{{csrf_token()}}'
+            },
+            success:function(data){
+                if(data.status === 'PROCESSING'){
+                    $('#form-answer').submit();
+                } else if(data.status === 'FINISHED'){
+                    Swal.fire(
+                        'Lỗi',
+                        'Bạn đã nộp bài.',
+                        'error'
+                    )
+                }
+            }
+        });
+    }
 </script>
 @endsection
