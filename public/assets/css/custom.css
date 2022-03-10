@@ -1,1 +1,17 @@
 /* Your Custom CSS Goes here */
+
+.bg-correct {
+    background-color: #E6FCF0 !important;
+}
+
+.bd-correct {
+    border-color: #E6FCF0 !important;
+}
+
+.bg-incorrect {
+    background-color: #FCE3E5 !important;
+}
+
+.bd-incorrect {
+    border-color: #FCE3E5 !important;
+}

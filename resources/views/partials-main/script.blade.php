@@ -9,5 +9,8 @@
 <script src="{{asset('assets/js/custom.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/datatables.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{asset('assets/plugins/blockUI/jquery.blockUI.min.js')}}"></script>
+<script src="{{asset('assets/plugins/countdown/jquery.countdown.min.js')}}"></script>
+{{--<script src="{{asset('assets/js/pages/blockui.js')}}"></script>--}}
 {{--<script src="{{asset('assets/js/pages/datatables.js')}}"></script>--}}
 @yield('script')

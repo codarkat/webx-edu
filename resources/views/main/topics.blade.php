@@ -18,13 +18,15 @@
                         </div>
                         <div class="widget-popular-blog-content ps-4">
                             <div class="row">
-                                <div class="col-6">
-                                    <span class="text-white h4" id="topic-name-{{$topic->id}}">
-                                        {{$topic->name}}
-                                    </span>
-                                    <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
-                                        {{$topic->description}}
-                                    </span>
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <span class="text-white h4" id="topic-name-{{$topic->id}}">
+                                            {{$topic->name}}
+                                        </span>
+                                        <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
+                                            {{$topic->description}}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <ul class="list-group list-group-flush">
@@ -42,8 +44,21 @@
                                             DEADLINE: <strong id="topic-deadline-{{$topic->id}}">{{$topic->deadline}}</strong>
                                         </span>
                     <div class="float-end" id="footer-button-{{$topic->id}}">
-                        <a type="button" class="btn btn-danger js-unsubscribe" data-topic-id="{{$topic->id}}" data-user-id="1"><i class="material-icons">clear</i>Hủy đăng ký</a>
-                        <a href="{{route('user.exam', $topic->id )}}" type="button" class="btn btn-info"><i class="material-icons">arrow_forward</i>Bắt đầu làm bài</a>
+                        @if(in_array($topic->id, $results))
+                        <a type="button" class="btn btn-dark js-unsubscribe-disable" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">clear</i>Hủy đăng ký</a>
+                        @else
+                        <a type="button" class="btn btn-danger js-unsubscribe" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">clear</i>Hủy đăng ký</a>
+                        @endif
+
+
+                            @if(in_array($topic->id, $results_processing))
+                                <a type="button" class="btn btn-info js-continue-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Tiếp tục làm bài</a>
+                            @elseif(in_array($topic->id, $results_finished))
+                                <a type="button" class="btn btn-info js-result-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Kết quả</a>
+                            @else
+                                <a type="button" class="btn btn-info js-start-exam" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">arrow_forward</i>Bắt đầu làm bài</a>
+                            @endif
+
                     </div>
                 </div>
             </div>
@@ -56,13 +71,15 @@
                             </div>
                             <div class="widget-popular-blog-content ps-4">
                                 <div class="row">
-                                    <div class="col-6">
-                                    <span class="text-white h4" id="topic-name-{{$topic->id}}">
-                                        {{$topic->name}}
-                                    </span>
-                                        <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
-                                        {{$topic->description}}
-                                    </span>
+                                    <div class="col-6 d-flex align-items-center justify-content-center">
+                                        <div class="text-center">
+                                            <span class="text-white h4" id="topic-name-{{$topic->id}}">
+                                                {{$topic->name}}
+                                            </span>
+                                                <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
+                                                {{$topic->description}}
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="col-6">
                                         <ul class="list-group list-group-flush">
@@ -80,7 +97,7 @@
                                             DEADLINE: <strong id="topic-deadline-{{$topic->id}}">{{$topic->deadline}}</strong>
                                         </span>
                         <div class="float-end" id="footer-button-{{$topic->id}}">
-                            <a type="button" class="btn btn-warning js-subscribe" data-topic-id="{{$topic->id}}" data-user-id="1"><i class="material-icons">recommend</i>Đăng ký</a>
+                            <a type="button" class="btn btn-warning js-subscribe" data-topic-id="{{$topic->id}}" data-user-id="{{Auth::user()->id}}"><i class="material-icons">recommend</i>Đăng ký</a>
                         </div>
                     </div>
                 </div>
@@ -96,7 +113,103 @@
     <script>
         let body = $('body');
 
-        //Listen event onclick from button subscribe
+
+        body.on('click', '.js-start-exam', function () {
+            Swal.fire({
+                title: 'Bạn có chắc không?',
+                text: "Thời gian làm bài sẽ bắt đầu được tính khi bạn đồng ý!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Đóng',
+                confirmButtonText: 'Okay, bắt đầu!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let topic_id = $(this).data("topic-id");
+                    let user_id = $(this).data("user-id");
+                    $.ajax({
+                        type:'POST',
+                        url: '{{route('result.store')}}',
+                        data: {
+                            topic_id: topic_id,
+                            user_id: user_id,
+                            _token: '{{csrf_token()}}'
+                        },
+                        success:function(data){
+                            if(Number(data.code) == 2){
+                                let footerButtons = `
+                                    <a type="button" class="btn btn-dark js-unsubscribe-disable" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">clear</i>Hủy đăng ký</a>
+                                    <a type="button" class="btn btn-info js-continue-exam" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">arrow_forward</i>Tiếp tục làm bài</a>
+                                `;
+                                $('#footer-button-' + topic_id).html(footerButtons);
+                                let url = '{{ route("user.exam", ":id") }}';
+                                url = url.replace(':id', topic_id );
+                                window.location.replace(url);
+                            } else if (Number(data.code) == 1){
+                                let footerButtons = `
+                                    <a type="button" class="btn btn-dark js-unsubscribe-disable" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">clear</i>Hủy đăng ký</a>
+                                    <a type="button" class="btn btn-info js-continue-exam" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">arrow_forward</i>Tiếp tục làm bài</a>
+                                `;
+                                $('#footer-button-' + topic_id).html(footerButtons);
+                                let url = '{{ route("user.exam", ":id") }}';
+                                url = url.replace(':id', topic_id );
+                                window.location.replace(url);
+                            } else if (Number(data.code) == 0) {
+                                Swal.fire(
+                                    'Lỗi',
+                                    'Bài kiểm tra đã không được tạo thành công.',
+                                    'error'
+                                )
+                            }
+                        }
+                    });
+                }
+            });
+        })
+
+        body.on('click', '.js-continue-exam', function () {
+            let topic_id = $(this).data("topic-id");
+            let user_id = $(this).data("user-id");
+            $.ajax({
+                type:'POST',
+                url: '{{route('result.check')}}',
+                data: {
+                    topic_id: topic_id,
+                    user_id: user_id,
+                    _token: '{{csrf_token()}}'
+                },
+                success:function(data){
+                    if(data.status === 'PROCESSING'){
+                        let url = '{{ route("user.exam", ":id") }}';
+                        url = url.replace(':id', topic_id );
+                        window.location.replace(url);
+                    } else if(data.status === 'FINISHED'){
+                        Swal.fire(
+                            'Thông báo',
+                            'Bài kiểm tra đã hết giờ.',
+                            'warning'
+                        )
+                    }
+                }
+            });
+        })
+
+        body.on('click', '.js-result-exam', function () {
+            let topic_id = $(this).data("topic-id");
+            let url = '{{ route("user.result", ":id") }}';
+            url = url.replace(':id', topic_id );
+            window.location.replace(url);
+        })
+
+        body.on('click', '.js-unsubscribe-disable', function () {
+            Swal.fire(
+                'Thông báo',
+                'Bạn không thể hủy đăng ký sau khi bài kiểm tra được tạo.',
+                'warning'
+            )
+        })
+
         body.on('click', '.js-subscribe', function () {
             let topic_id = $(this).data("topic-id");
             let user_id = $(this).data("user-id");
@@ -111,12 +224,9 @@
                 success:function(data){
                     if(Number(data.code) == 1){
 
-                        let url = '{{ route("user.exam", ":id") }}';
-                        url = url.replace(':id', topic_id );
-
                         let footerButtons = `
                             <a type="button" class="btn btn-danger js-unsubscribe" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">clear</i>Hủy đăng ký</a>
-                            <a href="`+ url +`" type="button" class="btn btn-info"><i class="material-icons">arrow_forward</i>Bắt đầu làm bài</a>
+                            <a type="button" class="btn btn-info js-start-exam" data-topic-id="`+ topic_id +`" data-user-id="`+ user_id +`"><i class="material-icons">arrow_forward</i>Bắt đầu làm bài</a>
                         `;
                         $('#card-topic-'+ topic_id).removeClass('bg-danger');
                         $('#card-topic-'+ topic_id).addClass('bg-success');

@@ -19,18 +19,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//})->name('user.home');
 
 
 
 Route::post(
-    '/result-create',
-    [ResultController::class, 'createResult']
-)->name('result.create');
+    '/update',
+    [ResultController::class, 'update']
+)->name('result.update');
 
 
+Route::prefix('result')->name('result.')->group(function () {
+    Route::post(
+        '/store',
+        [ResultController::class, 'store']
+    )->name('store');
+    Route::post(
+        '/update',
+        [ResultController::class, 'update']
+    )->name('update');
+    Route::post(
+        '/check',
+        [ResultController::class, 'check']
+    )->name('check');
+
+    Route::post(
+        '/get-result',
+        [ResultController::class, 'getResult']
+    )->name('get-result');
+});
 
 //Topic
 Route::prefix('topic')->name('topic.')->group(function () {
@@ -70,17 +89,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
     )->name('topic-details');
 });
 
-Route::prefix('user')->name('user.')->group(function () {
-    Route::get(
-        '/exam/exam-id-{id}',
-        [UserController::class, 'exam']
-    )->name('exam');
-
-    Route::get(
-        '/topics',
-        [UserController::class, 'topics']
-    )->name('topics');
-});
+//Route::prefix('user')->name('user.')->group(function () {
+//    Route::get(
+//        '/exam/exam-id-{id}',
+//        [UserController::class, 'exam']
+//    )->name('exam');
+//
+//    Route::get(
+//        '/topics',
+//        [UserController::class, 'topics']
+//    )->name('topics');
+//});
 
 
 Route::prefix('question')->name('question.')->group(function () {
@@ -114,4 +133,45 @@ Route::prefix('subscribe')->name('subscribe.')->group(function () {
         '/delete',
         [SubscribeController::class, 'delete']
     )->name('delete');
+});
+
+
+Auth::routes();
+//Disable register, reset password
+Route::match(['get', 'post'], 'register', function(){
+    return route('index');
+});
+Route::match(['get', 'post'], 'password/reset', function(){
+    return route('index');
+});
+
+
+Route::get('/', function () {
+    return view('main.index');
+})->name('index')->middleware(['guest:web']);
+
+Route::prefix('user')->name('user.')->group(function (){
+    Route::middleware(['guest:web'])->group(function (){
+        Route::post('/check', [
+            'as' => 'check',
+            'uses' => 'User\UserController@check'
+        ]);
+    });
+
+    Route::middleware(['auth:web'])->group(function (){
+        Route::get(
+            '/exam/exam-id-{id}',
+            [UserController::class, 'exam']
+        )->name('exam');
+
+        Route::get(
+            '/result/exam-id-{id}',
+            [UserController::class, 'result']
+        )->name('result');
+
+        Route::get(
+            '/topics',
+            [UserController::class, 'topics']
+        )->name('topics');
+    });
 });

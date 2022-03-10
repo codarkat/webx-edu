@@ -30,7 +30,11 @@ class QuestionController extends Controller
                 $topic->num_question += 1;
                 $topic->save();
                 $answer = new Answer();
-                $answer->answer = $request->input('answer');
+                if($request->input('type') == 'MULTIPLE_CHOICE'){
+                    $answer->answer = json_encode($request->input('answer'));
+                } else {
+                    $answer->answer = $request->input('answer');
+                }
                 $answer->question_id = $question->id;
                 if($request->input('option_answer') !== null) {
                     $answer->option_answer = json_encode($request->input('option_answer'));

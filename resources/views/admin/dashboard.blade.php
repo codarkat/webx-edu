@@ -20,13 +20,15 @@
                         </div>
                         <div class="widget-popular-blog-content ps-4">
                             <div class="row">
-                                <div class="col-6">
-                                    <span class="text-white h4" id="topic-name-{{$topic->id}}">
-                                        {{$topic->name}}
-                                    </span>
-                                    <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
-                                        {{$topic->description}}
-                                    </span>
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <div class="text-center">
+                                        <span class="text-white h4" id="topic-name-{{$topic->id}}">
+                                            {{$topic->name}}
+                                        </span>
+                                        <span class="widget-popular-blog-text text-light" id="topic-description-{{$topic->id}}">
+                                            {{$topic->description}}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <ul class="list-group list-group-flush">
@@ -260,13 +262,15 @@
                                             </div>
                                             <div class="widget-popular-blog-content ps-4">
                                                             <div class="row">
-                                                                <div class="col-6">
-                                                                    <span class="text-white h4" id="topic-name-`+ data.data.id +`">
-                                                                            `+ data.data.name +`
-                                                                    </span>
-                                                                    <span class="widget-popular-blog-text text-light" id="topic-description-`+ data.data.id +`">
-                                                                            `+ data.data.description +`
-                                                                    </span>
+                                                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                                                    <div class="text-center">
+                                                                        <span class="text-white h4" id="topic-name-`+ data.data.id +`">
+                                                                                `+ data.data.name +`
+                                                                        </span>
+                                                                        <span class="widget-popular-blog-text text-light" id="topic-description-`+ data.data.id +`">
+                                                                                `+ data.data.description +`
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <ul class="list-group list-group-flush">

@@ -5,11 +5,12 @@
         <h1>{{$topic->name}}</h1>
         <span>{{$topic->description}}</span>
     </div>
-    <form action="{{route('result.create')}}" method="POST">
+    <div id="clock"></div>
+    <form action="{{route('result.update')}}" method="POST" id="form-answer">
         {{ csrf_field()}}
-        <input type="hidden" name="topic_id" value="{{$topic->id}}">
-        <input type="hidden" name="num_question" value="{{$topic->num_question}}">
-        <input type="hidden" name="user_id" value="1">
+        <input type="hidden" id="topic_id" name="topic_id" value="{{$topic->id}}">
+        <input type="hidden" id="num_question" name="num_question" value="{{$topic->num_question}}">
+        <input type="hidden" id="user_id" name="user_id" value="{{Auth::user()->id}}">
     @foreach($questions as $index=>$q)
         <div class="card">
             <div class="card-header">
@@ -78,13 +79,65 @@
             </div>
         </div>
     @endforeach
-        <button type="submit">abc</button>
     </form>
+    <button class="btn btn-primary btn-rounded full-width btn-lg mt-3 mt-3 js-finish-exam">Nộp bài</button>
+
 @endsection
 @section('script')
 <script>
-    function check(){
+    $('#clock').countdown('2022-03-10 03:41', function(event) {
+        var $this = $(this).html(event.strftime(''
+            // + '<span>%H</span> giờ '
+            // + '<span>%M</span> phút '
+            // + '<span>%S</span> giây'
+            + '<span>%N</span> phút '
+            + '<span>%S</span> giây'
+        )).on('finish.countdown', function (){
+            return Swal.fire(
+                'Lỗi',
+                'Bạn đã nộp bài.',
+                'error'
+            );
+        });
 
-    }
+    });
+    let body = $('body');
+    body.on('click', '.js-finish-exam', function () {
+        Swal.fire({
+            title: 'Nộp bài?',
+            text: "Bài kiểm tra sẽ kết thúc!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Đóng',
+            confirmButtonText: 'Okay, nộp bài!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let topic_id = $('#topic_id').val();
+                let user_id = $('#user_id').val();
+                $.ajax({
+                    type:'POST',
+                    url: '{{route('result.check')}}',
+                    data: {
+                        topic_id: topic_id,
+                        user_id: user_id,
+                        _token: '{{csrf_token()}}'
+                    },
+                    success:function(data){
+                        if(data.status === 'PROCESSING'){
+                            $('#form-answer').submit();
+                        } else if(data.status === 'FINISHED'){
+                            Swal.fire(
+                                'Lỗi',
+                                'Bạn đã nộp bài.',
+                                'error'
+                            )
+                        }
+                    }
+                });
+            }
+        });
+    })
 </script>
 @endsection

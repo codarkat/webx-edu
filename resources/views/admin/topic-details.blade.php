@@ -489,7 +489,6 @@
                             topic_id: topic_id,
                             answer: $('#answer_text').val()
                         }
-                        console.log(data);
                         ajaxCreateQuestion(data)
                     }
                 } else if ($('#question-type option:selected').val() == 'CHOICE') {
@@ -603,14 +602,12 @@
         function ajaxCreateQuestion(data) {
             let url = '{{route("question.store")}}';
             data['_token'] = '{{csrf_token()}}';
-            console.log(data);
             $.ajax({
                 type:'POST',
                 url:url,
                 data: data,
                 success:function(data){
                     if(Boolean(data.code)){
-
                         if(table.row( ':last').data()){
                             let rowData = table.row( ':last').data();
                             rowData[0] = rowData.DT_RowIndex + 1;

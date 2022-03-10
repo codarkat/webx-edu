@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Answer extends Model
 {
     use HasFactory;
+    protected $connection  = 'mysql_edu';
     protected $table = 'answers';
     protected $fillable = [
         'answer',

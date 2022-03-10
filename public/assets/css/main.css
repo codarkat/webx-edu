@@ -6407,7 +6407,7 @@ span.flatpickr-weekday {
 }
 
 .app-auth-sign-in .app-auth-background {
-    background: url('../images/backgrounds/sign-in.svg') no-repeat;
+    background-repeat: no-repeat;
     background-size: 60%;
     background-position: center;
 }
@@ -6430,7 +6430,7 @@ span.flatpickr-weekday {
     padding-left: 70px;
     background: url('../images/mirea.png') no-repeat;
     height: 50px;
-    background-size: 50px;
+    background-size: 40px;
     align-items: center;
     text-decoration: none;
     color: #40475c;

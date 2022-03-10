@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        'mysql_edu' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL_EDU'),
+            'host' => env('DB_HOST_EDU', '127.0.0.1'),
+            'port' => env('DB_PORT_EDU', '3306'),
+            'database' => env('DB_DATABASE_EDU', 'forge'),
+            'username' => env('DB_USERNAME_EDU', 'forge'),
+            'password' => env('DB_PASSWORD_EDU', ''),
+            'unix_socket' => env('DB_SOCKET_EDU', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

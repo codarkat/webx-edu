@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('results', function (Blueprint $table) {
+        Schema::connection('mysql_edu')->create('results', function (Blueprint $table) {
             $table->id();
             $table->string('topic_id');
             $table->string('user_id');
-            $table->string('num_correct');
-            $table->string('num_incorrect');
-            $table->longText('result');
+            $table->string('num_correct')->nullable();
+            $table->string('num_incorrect')->nullable();
+            $table->enum('status', ['PROCESSING', 'FINISHED'])->default('PROCESSING');
+            $table->longText('result')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('results');
+        Schema::connection('mysql_edu')->dropIfExists('results');
     }
 };

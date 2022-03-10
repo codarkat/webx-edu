@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('answers', function (Blueprint $table) {
+        Schema::connection('mysql_edu')->create('answers', function (Blueprint $table) {
             $table->id();
             $table->string('answer');
             $table->string('option_answer')->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answers');
+        Schema::connection('mysql_edu')->dropIfExists('answers');
     }
 };

@@ -1,13 +1,13 @@
 <div class="app-sidebar">
     <div class="logo">
-        <a href="index.html" class="logo-icon" style="background-image: url('{{asset('assets/images/mirea.png')}}')"><span class="logo-text"><strong>MIREA</strong>VN</span></a>
-        <div class="sidebar-user-switcher user-activity-online">
-            <a href="#">
-                <img src="../../assets/images/avatars/avatar.png">
-                <span class="activity-indicator"></span>
-                <span class="user-info-text">Chloe<br><span class="user-state-info">On a call</span></span>
-            </a>
-        </div>
+        <a href="index.html" class="logo-icon" style="background-image: url('{{asset('assets/images/mirea.png')}}')"><span class="text-dark hidden-on-mobile">MIREAVN</span><strong class="text-danger hidden-on-mobile">EDUCATION</strong></a>
+{{--        <div class="sidebar-user-switcher user-activity-online">--}}
+{{--            <a href="#">--}}
+{{--                <img src="https://www.mireavn.ru/data/images/upload/users/{{Auth::user()->image}}">--}}
+{{--                <span class="activity-indicator"></span>--}}
+{{--                <span class="user-info-text">{{ Auth::user()->name }}<br><span class="user-state-info">{{ Auth::user()->email }}</span></span>--}}
+{{--            </a>--}}
+{{--        </div>--}}
     </div>
     <div class="app-menu">
         <ul class="accordion-menu">
@@ -21,10 +21,12 @@
                 <a href=""><i class="material-icons-two-tone">emoji_events</i>Kết quả</a>
             </li>
             <li>
-                <a href=""><i class="material-icons-two-tone">notifications_active</i>Thông báo<span class="badge rounded-pill badge-success float-end">14</span></a>
-            </li>
-            <li>
-                <a href=""><i class="material-icons-two-tone">logout</i>Thoát</a>
+                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                    <i class="material-icons-two-tone">logout</i>Thoát</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
         </ul>
     </div>

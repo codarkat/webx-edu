@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subscribes', function (Blueprint $table) {
+        Schema::connection('mysql_edu')->create('subscribes', function (Blueprint $table) {
             $table->id();
             $table->string('topic_id');
             $table->string('user_id');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscribes');
+        Schema::connection('mysql_edu')->dropIfExists('subscribes');
     }
 };
