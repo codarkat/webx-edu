@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SubscribeController;
@@ -18,17 +20,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Route::get('/', function () {
-//    return view('welcome');
-//})->name('user.home');
-
-
-
-Route::post(
-    '/update',
-    [ResultController::class, 'update']
-)->name('result.update');
 
 
 Route::prefix('result')->name('result.')->group(function () {
@@ -49,6 +40,21 @@ Route::prefix('result')->name('result.')->group(function () {
         '/get-result',
         [ResultController::class, 'getResult']
     )->name('get-result');
+
+    Route::get(
+        '/get-all',
+        [ResultController::class, 'getAll']
+    )->name('get-all');
+
+    Route::get(
+        '/get-user-results/{user_id}',
+        [ResultController::class, 'getUserResults']
+    )->name('get-user-results');
+
+    Route::get(
+        '/get-clock/{topic_id}',
+        [ResultController::class, 'getClock']
+    )->name('get-clock');
 });
 
 //Topic
@@ -77,29 +83,8 @@ Route::prefix('topic')->name('topic.')->group(function () {
     )->name('get-topic-details');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get(
-        'dashboard',
-        [AdminController::class, 'dashboard']
-    )->name('dashboard');
 
-    Route::get(
-        '/topic-details/topic-id-{id}',
-        [AdminController::class, 'topicDetails']
-    )->name('topic-details');
-});
 
-//Route::prefix('user')->name('user.')->group(function () {
-//    Route::get(
-//        '/exam/exam-id-{id}',
-//        [UserController::class, 'exam']
-//    )->name('exam');
-//
-//    Route::get(
-//        '/topics',
-//        [UserController::class, 'topics']
-//    )->name('topics');
-//});
 
 
 Route::prefix('question')->name('question.')->group(function () {
@@ -123,18 +108,6 @@ Route::prefix('question')->name('question.')->group(function () {
     )->name('get-question');
 });
 
-Route::prefix('subscribe')->name('subscribe.')->group(function () {
-    Route::post(
-        '/store',
-        [SubscribeController::class, 'store']
-    )->name('store');
-
-    Route::post(
-        '/delete',
-        [SubscribeController::class, 'delete']
-    )->name('delete');
-});
-
 
 Auth::routes();
 //Disable register, reset password
@@ -144,7 +117,6 @@ Route::match(['get', 'post'], 'register', function(){
 Route::match(['get', 'post'], 'password/reset', function(){
     return route('index');
 });
-
 
 Route::get('/', function () {
     return view('main.index');
@@ -158,7 +130,7 @@ Route::prefix('user')->name('user.')->group(function (){
         ]);
     });
 
-    Route::middleware(['auth:web'])->group(function (){
+    Route::middleware(['auth:web', 'PreventBrowserBackHistory'])->group(function (){
         Route::get(
             '/exam/exam-id-{id}',
             [UserController::class, 'exam']
@@ -173,5 +145,32 @@ Route::prefix('user')->name('user.')->group(function (){
             '/topics',
             [UserController::class, 'topics']
         )->name('topics');
+
+        Route::get('/list-results',
+            [UserController::class, 'listResults']
+        )->name('list-results');
+    });
+});
+
+Route::controller(SubscribeController::class)->middleware(['auth:web'])->group(function (){
+    Route::prefix('subscribe')->name('subscribe.')->group(function () {
+        Route::post( '/store','store')->name('store');
+        Route::post( '/delete', 'delete')->name('delete');
+    });
+});
+
+
+Route::prefix('admin')->name('admin.')->group(function (){
+    Route::middleware(['auth:admin', 'PreventBrowserBackHistory'])->group(function (){
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::get( 'dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/topic-details/topic-id-{id}', [AdminController::class, 'topicDetails'])->name('topic-details');
+        Route::get('/list-results', [AdminController::class, 'listResults'])->name('list-results');
+        Route::get( '/result/{user_id}/{topic_id}', [AdminController::class, 'result'])->name('result');
+    });
+
+    Route::middleware(['guest:admin', 'PreventBrowserBackHistory'])->group(function (){
+        Route::get('/',  [AdminAuthController::class, 'showLogin'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'login'])->name('check');
     });
 });

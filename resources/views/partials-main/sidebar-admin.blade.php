@@ -12,16 +12,16 @@
     <div class="app-menu">
         <ul class="accordion-menu">
             <li>
-                <a href="{{route('user.topics')}}"><i class="material-icons-two-tone">description</i>Kiểm tra</a>
+                <a href="{{route('admin.dashboard')}}"><i class="material-icons-two-tone">dashboard</i>Dashboard</a>
             </li>
             <li>
-                <a href="{{route('user.list-results')}}"><i class="material-icons-two-tone">emoji_events</i>Kết quả</a>
+                <a href="{{route('admin.list-results')}}"><i class="material-icons-two-tone">emoji_events</i>Kết quả</a>
             </li>
             <li>
                 <a href="" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                     <i class="material-icons-two-tone">logout</i>Thoát</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                <form id="logout-form" action="{{ route('admin.logout')}}" method="POST" class="d-none">
                     @csrf
                 </form>
             </li>

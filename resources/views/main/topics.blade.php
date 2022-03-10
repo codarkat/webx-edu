@@ -32,7 +32,7 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill @if($topic->status == \App\Enums\StatusEnum::ACTIVE) badge-success @else badge-danger @endif" id="topic-status-{{$topic->id}}">{{$topic->status}}</span></li>
                                         <li class="list-group-item">Số lượng câu hỏi: <span class="badge badge-style-light rounded-pill badge-info" id="topic-num-question-{{$topic->id}}">{{$topic->num_question}}</span></li>
-                                        <li class="list-group-item">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
+                                        <li class="list-group-item" id="clock-{{$topic->id}}">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill @if($topic->status == \App\Enums\StatusEnum::ACTIVE) badge-success @else badge-danger @endif" id="topic-status-{{$topic->id}}">{{$topic->status}}</span></li>
                                             <li class="list-group-item">Số lượng câu hỏi: <span class="badge badge-style-light rounded-pill badge-info" id="topic-num-question-{{$topic->id}}">{{$topic->num_question}}</span></li>
-                                            <li class="list-group-item">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
+                                            <li class="list-group-item" id="clock-{{$topic->id}}">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-{{$topic->id}}">{{$topic->duration}} Phút</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -310,6 +310,30 @@
 
         })
 
+        function clock(topic_id){
+            let url = '{{ route("result.get-clock", ":id") }}';
+            url = url.replace(':id', topic_id );
+            $.get(url, function (data) {
+                console.log(data.clock)
+                $('#clock-'+topic_id).countdown(data.clock, function(event) {
+                    var $this = $(this).html(event.strftime('Thời gian còn lại: <span class="btn btn-warning btn-style-light">'
+                        // + '<span>%H</span> giờ '
+                        // + '<span>%M</span> phút '
+                        // + '<span>%S</span> giây'
+                        + '<span>%N</span>:'
+                        + '<span>%S</span>'
+                        + '</span>'
+                    ))
+                    if(event.offset.totalSeconds < 11){
+                        $('.clock').addClass('bg-countdown-red')
+                    };
+                }).on('finish.countdown', function (){
+                    sendSubmit();
+                });
+            })
+        }
+
+        // clock(2);
 
     </script>
 @endsection

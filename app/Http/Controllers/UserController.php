@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function exam($id){
+        $result = Result::where('topic_id',$id)->where('user_id',Auth::user()->id)->first();
+        if($result == null || $result->status == 'FINISHED'){
+            abort(404);
+        }
         $topic = Topic::find($id);
         $questions = Question::where('topic_id',$topic->id)->get();
         return view('main.exam', [
@@ -22,14 +26,21 @@ class UserController extends Controller
     }
 
     public function result($id){
+        $result = Result::where('topic_id',$id)->where('user_id',Auth::user()->id)->first();
+        if(!isset($result)){
+            abort(404);
+        }
         $topic = Topic::find($id);
         $questions = Question::where('topic_id',$topic->id)->get();
-        $result = Result::where('topic_id',$topic->id)->where('user_id',Auth::user()->id)->first();
         return view('main.result', [
             'questions' => $questions,
             'topic' => $topic,
             'result' => $result,
         ]);
+    }
+
+    public function listResults(){
+        return view('main.list-results');
     }
 
     public function topics(){
@@ -66,4 +77,5 @@ class UserController extends Controller
             'results_finished' => $array_result_finished,
         ]);
     }
+
 }

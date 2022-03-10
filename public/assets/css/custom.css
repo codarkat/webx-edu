@@ -15,3 +15,17 @@
 .bd-incorrect {
     border-color: #FCE3E5 !important;
 }
+
+.bg-countdown-red {
+    background-color: #FCE3E5 !important;
+}
+
+.app-sidebar .clock {
+    position: fixed;
+    background-color: #f5f7fa;
+    width: 200px;
+    margin: 40px;
+    bottom: 0px;
+    padding: 10px;
+    border-radius: 10px;
+}
