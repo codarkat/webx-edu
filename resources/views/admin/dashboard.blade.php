@@ -145,8 +145,8 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{asset('assets/plugins/flatpickr/flatpickr.js')}}"></script>
-    <script src="{{asset('assets/js/pages/datepickers.js')}}"></script>
+    <script src="{{asset('public/assets/plugins/flatpickr/flatpickr.js')}}"></script>
+    <script src="{{asset('public/assets/js/pages/datepickers.js')}}"></script>
     <script>
         let body = $('body');
 
