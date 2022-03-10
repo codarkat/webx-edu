@@ -1,1 +1,2 @@
 -Fix bug nếu cập nhật thêm câu hỏi từ admin, người dùng sẽ có thêm câu hỏi mới trong bảng kết quả
+-Xu ly loi khi admin xoa cac chu de -> du lieu cua sinh vien khong bi xoa

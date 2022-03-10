@@ -22,7 +22,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link language-dropdown-toggle" href="#" id="languageDropDown" data-bs-toggle="dropdown">
-                            <img class="avatar avatar-rounded" src="https://www.mireavn.ru/data/images/upload/users/{{Auth::user()->image}}" alt=""></a>
+                            <img class="avatar avatar-rounded" src="https://mireavn.ru/data/images/upload/users/{{Auth::user()->image}}" alt=""></a>
                     </li>
                 </ul>
             </div>
