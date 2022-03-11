@@ -252,8 +252,7 @@
             $('#bd-result-'+id).addClass("bd-incorrect");
         }
         if(type === 'MULTIPLE_CHOICE'){
-            let arrayAnswers = answer;
-            $.each(arrayAnswers, function(index, answer) {
+            $.each(answer, function(index, answer) {
                 $('#user-checkbox-'+id+'-'+answer).prop('checked', true);
             })
         } else if (type === 'CHOICE'){
