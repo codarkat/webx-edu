@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::connection('mysql_edu')->create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->text('content');
             $table->string('topic_id');
             $table->enum('type', ['CHOICE', 'FORM', 'MULTIPLE_CHOICE']);
             $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');

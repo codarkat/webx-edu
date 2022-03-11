@@ -18,7 +18,7 @@
                 <input type="hidden" name="question_type_{{$index+1}}" value="{{$q->type}}">
             </div>
             <div class="card-body">
-                <p class="card-description">{{$q->content}}</p>
+                <p class="card-description" style="white-space:pre">{{$q->content}}</p>
                 <div class="example-container">
         @if($q->type == 'CHOICE')
                         <div class="example-code">
