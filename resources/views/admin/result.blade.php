@@ -85,7 +85,7 @@
                                     <h5 class="card-title">Câu {{$index+1}} <span id="text-result-{{$q->id}}"></span></h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-description">{{$q->content}}</p>
+                                    <p class="card-description" style="white-space:pre">{{$q->content}}</p>
                                     <div class="example-container" id="bd-result-{{$q->id}}">
                                         @if($q->type == 'CHOICE')
                                             <div class="example-code" id="bg-result-{{$q->id}}">
