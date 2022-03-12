@@ -1,2 +1,7 @@
 -Fix bug nếu cập nhật thêm câu hỏi từ admin, người dùng sẽ có thêm câu hỏi mới trong bảng kết quả
 -Xu ly loi khi admin xoa cac chu de -> du lieu cua sinh vien khong bi xoa
+-Câu hỏi dạng form, nhưng có thể có nhiều đáp án đúng
+-Duyệt dữ liệu qua excel
+-Xử lý nút public
+-Có thêm phần giải thích nếu có
+-Không lưu dữ liệu câu trả lời của ng dùng khi thoát
