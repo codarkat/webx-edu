@@ -47,7 +47,8 @@ class ResultController extends Controller
                 if($data['answer_'.$data['question_id_'.$i]] != ''){
                     $q = Answer::where('question_id',$data['question_id_'.$i])->first();
 //                    if($q->answer == $data['answer_'.$data['question_id_'.$i]]){
-                    if(in_array($data['answer_'.$data['question_id_'.$i]], json_decode($q->answer), true)){
+//                    if(in_array($data['answer_'.$data['question_id_'.$i]], json_decode($q->answer), true)){
+                    if(in_array(strtolower($data['answer_'.$data['question_id_'.$i]]), array_map('strtolower', json_decode($q->answer)), true)){
                         $isCorrect = true;
                         $answer = $data['answer_'.$data['question_id_'.$i]];
                         $num_correct++;
