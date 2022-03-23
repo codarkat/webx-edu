@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 09, 2022 at 09:37 AM
+-- Generation Time: Mar 23, 2022 at 07:26 PM
 -- Server version: 10.5.12-MariaDB-cll-lve
 -- PHP Version: 7.2.34
 
@@ -47,7 +47,8 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `gender`, `phone`, `address`, `image`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin@mireavn.ru', 'MALE', '', '', '', 'admin@mireavn.ru', NULL, '$2y$10$fM6LEDvXf4LkoFOjkPEdiOo1aHzCU7p3zrrmHSuyvEsN3DS2zoet6', NULL, NULL, NULL);
+(1, 'admin@mireavn.ru', 'MALE', '', '', '', 'admin@mireavn.ru', NULL, '$2a$12$K9SX7umOEr67Zx1v.FEheue51hPMoyN7L4vdTAZZeiZzmS2/FpRwW', NULL, NULL, NULL),
+(3, 'MIREAVN EDUCATION', 'MALE', '', 'Pass:Mirea123456789', '', 'admin@edu.mireavn.ru', NULL, '$2a$12$.NJQHbkSeTuTcGc3ho2CduijfCZDKAwj2hYPlw4D9Qs8ZP1T74HTS', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -347,7 +348,7 @@ INSERT INTO `users` (`id`, `name`, `image`, `email`, `status`, `email_verified_a
 (35, 'Đinh Bá Phương', 'avatar.png', 'luaquehuong93ht@gmail.com', 'ACTIVE', NULL, '$2y$10$kXb27vCJRG.yKJo4mmePwenLKTFcZX8ClClTOdHjPM5viBjx/rn5S', NULL, '2021-11-05 04:53:10', '2021-11-14 09:24:14'),
 (36, 'Vương Trường Sơn', 'avatar.png', 'tr.son.2112@gmail.com', 'ACTIVE', NULL, '$2y$10$msY2o9Th/vfFwn6fdZkXnuAFCUNWazf8UZGD.K7gwDn5D7ZW7Mc9O', NULL, '2021-11-05 04:53:10', '2021-11-14 08:14:23'),
 (37, 'Bùi Văn Thanh', 'avatar.png', 'buithanhmta.2020@gmail.com', 'ACTIVE', NULL, '$2y$10$bIU2FbjAmnxeOiqhgdGV3u0YAVy2YP4AaAp5nlSTsz5GuO4AUBRoy', NULL, '2021-11-05 04:53:11', '2021-11-14 09:36:14'),
-(38, 'Đỗ Thị Phương Thảo', 'avatar.png', 'thaothao2396nd@gmail.com', 'ACTIVE', NULL, '$2y$10$O44CV2hVJBmIq11q5ljBsOuh/k8/2sSl3xKNwzkMwKSsLGxjR.6uO', NULL, '2021-11-05 04:53:11', '2021-11-14 08:14:37'),
+(38, 'Đỗ Thị Phương Thảo', 'avatar.png', 'thaothao2396nd@gmail.com', 'ACTIVE', NULL, '$2y$10$PQPNQ3IpY4mzZXgpRJ.5B.Z3uS0RVrcLS4fwf9SL7dmTKtIV9yoHe', NULL, '2021-11-05 04:53:11', '2022-03-19 17:11:47'),
 (39, 'Đặng Văn Thức', '6187a1e635df7.png', 'Thuc.dang0209@hcmut.edu.vn', 'ACTIVE', NULL, '$2y$10$s5LCdHToywEMcUSkxEGbp.OoAbvHTz5kRVSZy3Pb7bOD27HdBVKOa', NULL, '2021-11-05 04:53:12', '2021-11-14 08:14:43'),
 (40, 'Phạm Thị Hoài Thương', 'avatar.png', 'phamthihoaithuong424@gmail.com', 'ACTIVE', NULL, '$2y$10$9q/EpDFjEq20H.iQG34Wv.FjaVR0m6m1yOYtdy0UNpymL7dYjQFHW', NULL, '2021-11-05 04:53:13', '2021-11-14 08:14:46'),
 (41, 'Đỗ Trung Tiến', '61850eb778a26.png', 'dotrungtien1993@gmail.com', 'ACTIVE', NULL, '$2y$10$w8oWmFw4PfGnpStoffRogeVoYNWdOH3QmRaWRrb10Snq7O90YyQAi', NULL, '2021-11-05 04:54:25', '2021-11-14 08:14:54'),
@@ -356,12 +357,12 @@ INSERT INTO `users` (`id`, `name`, `image`, `email`, `status`, `email_verified_a
 (44, 'Nguyễn Hữu Thành Trung', 'avatar.png', 'tuclen123@gmail.com', 'INACTIVE', NULL, '$2y$10$hWvSvrgisfM7tq.BHRIXtuJJ7evacf5bK9/oVOQgcC7jLpkodTLhi', NULL, '2021-11-05 04:54:27', '2021-11-14 07:39:32'),
 (45, 'Đinh Nhật Trường', 'avatar.png', 'truongnhat128@gmail.com', 'ACTIVE', NULL, '$2y$10$nhiG6RCPetgj1e/n52vDV.ge59sThZ2QCHK35I18zJKFXRS6rtAR6', NULL, '2021-11-05 04:54:28', '2021-11-14 08:15:17'),
 (46, 'Trần Anh Tú', 'avatar.png', 'tutran1998.tt@gmail.com', 'ACTIVE', NULL, '$2y$10$jfFzPqQayUwnFaSoGVML/OVDYQPT/6hHYHZCwPMoXoolf9VXxJRFy', NULL, '2021-11-05 04:54:28', '2021-11-14 08:15:23'),
-(47, 'Mai Văn Tuấn', 'avatar.png', '8268826@gmail.com', 'ACTIVE', NULL, '$2y$10$q6Z8w9trxNC7HxzWjjJv0..jqYkQRHNsrxED6X315EunWp6WiOlSG', NULL, '2021-11-05 04:54:29', '2021-11-14 08:15:26'),
-(48, 'Nguyễn Văn Tuấn', 'avatar.png', 'tuanmya2pkkq@gmail.com', 'ACTIVE', NULL, '$2y$10$Mpl4yTZlgMssTFqo1JbDQOU/eylYhc1xEWq6tGhAyqLLC5w5g5T4q', NULL, '2021-11-05 04:54:29', '2021-11-14 08:15:28'),
-(49, 'Phạm Thị Thanh Vân', 'avatar.png', 'fanvucattuong@gmail.com', 'ACTIVE', NULL, '$2y$10$bhDvmeEafr2ysTwFcCMDsug4K0sZE.XRsajfD0w/gOKtzMWSosz0C', NULL, '2021-11-05 04:54:30', '2021-11-14 08:15:32'),
+(47, 'Mai Văn Tuấn', 'avatar.png', '8268826@gmail.com', 'ACTIVE', NULL, '$2y$10$NvMjTkjpGhORfq4Dh00B0.0bMplWM3KYvESwHWAaOaQMup2KqImmG', NULL, '2021-11-05 04:54:29', '2022-03-19 16:59:41'),
+(48, 'Nguyễn Văn Tuấn', 'avatar.png', 'tuanmya2pkkq@gmail.com', 'ACTIVE', NULL, '$2y$10$bB0tz8e.11hA.dt/tVit5OYPTFDeLnZ8S52/9y/ipMo2rYRJw49NC', NULL, '2021-11-05 04:54:29', '2022-03-19 17:04:29'),
+(49, 'Phạm Thị Thanh Vân', 'avatar.png', 'fanvucattuong@gmail.com', 'ACTIVE', NULL, '$2y$10$pStPfrmVTPKiylS25YGH7.SkT8fseQdjO8Ti237NzL2J0GeiPurHS', NULL, '2021-11-05 04:54:30', '2022-03-13 12:42:44'),
 (50, 'Nghiêm Vũ Vinh', 'avatar.png', 'nghiemvuvinh@gmail.com', 'ACTIVE', NULL, '$2y$10$AW7DA5ZEGu92Xa25t7KwvOAZGq6VPszeLu9X.mk2bRkllABS6yOoW', NULL, '2021-11-05 04:54:30', '2021-11-14 08:15:35'),
 (51, 'Phạm Thế Vinh', 'avatar.png', 'pmvinh99@gmail.com', 'ACTIVE', NULL, '$2y$10$HikJsCpdetucusv7d5QJMeDYqSUaxAMtyq8SRRgSP0ZhajFxvZiRS', NULL, '2021-11-05 04:55:43', '2021-11-14 08:15:42'),
-(52, 'Trần Toàn Thắng', 'avatar.png', 'trantoanthangat17@gmail.com', 'ACTIVE', NULL, '$2y$10$ZiVwc/EKSCSVEVr/b2FqN.bzOR7ZzX2tfQPDP0zxTpiWroo8l1Xa.', NULL, '2021-11-05 04:55:44', '2021-11-14 08:19:20'),
+(52, 'Trần Toàn Thắng', 'avatar.png', 'trantoanthangat17@gmail.com', 'ACTIVE', NULL, '$2y$10$kPsviOP7UcUcmOBBIYhOYuchGvFBzYw6TG/AxvcGjMKIPMGrlECdy', NULL, '2021-11-05 04:55:44', '2022-03-19 17:23:16'),
 (53, 'Nguyễn Khắc Thanh Tùng', 'avatar.png', 'nguyenkhacthanhtung12k2002@gmail.com', 'ACTIVE', NULL, '$2y$10$KQq89yLDVZXm91kG6YiaIuqq49cEQ0ktDC770yxKs/Lt0KHTpHWBO', NULL, '2021-11-05 04:55:44', '2021-11-14 08:16:01'),
 (54, 'Lê Hồng Quang', 'avatar.png', 'quanghx13@gmail.com', 'ACTIVE', NULL, '$2y$10$Wloi9t8wdjLejlv/.fDvDe4G2OnTFMHNWGDmI5C107NN6Ui.UEmY2', NULL, '2021-11-05 04:55:45', '2021-11-14 08:16:03'),
 (55, 'Trần Quốc Bảo', 'avatar.png', 'tbao3406@gmail.com', 'ACTIVE', NULL, '$2y$10$GD5.74xqkr8RzjBXc28xQek2GT12yws5zTSdiq4Ci3YrTDcn3/Hpi', NULL, '2021-11-05 04:55:45', '2021-11-14 08:16:08'),
@@ -370,7 +371,10 @@ INSERT INTO `users` (`id`, `name`, `image`, `email`, `status`, `email_verified_a
 (58, 'Lê Quang Khải', 'avatar.png', 'lequangkhai638@gmail.com', 'ACTIVE', NULL, '$2y$10$a/ZdcPddJVSpzNbrddETtefxyGsoqzJMQQ7M64jtFRvm.1.nxdliq', NULL, '2021-11-05 04:55:47', '2021-11-14 08:16:24'),
 (59, 'Minh Thành Trung', 'avatar.png', 'trunghnt321@gmail.com', 'ACTIVE', NULL, '$2y$10$c.6M.JSmsz2OakpurA2l7ePA414NAtR643t47brN.J95ZaVnnziGu', NULL, '2021-11-05 04:55:48', '2021-11-14 08:16:28'),
 (60, 'Khách mời', 'avatar.png', 'guest@mireavn.ru', 'INACTIVE', NULL, '$2y$10$VA/edSQxopNWpX6MEoKeOuvUCcUfStKZIo8c.0ogWFED7E8a/qepO', NULL, '2021-11-11 18:47:05', '2021-11-14 07:39:33'),
-(61, 'BCH CHI ĐOÀN', 'avatar.png', 'mirealienbangnga@gmail.com', 'INACTIVE', NULL, '$2y$10$B7Nqmy.aaIDTu82D5ue.n.g5qzo6km8T/MJrK7up0ndppXUqg56tG', NULL, '2021-11-11 18:47:05', '2021-11-14 07:39:33');
+(61, 'BCH CHI ĐOÀN', 'avatar.png', 'mirealienbangnga@gmail.com', 'INACTIVE', NULL, '$2y$10$B7Nqmy.aaIDTu82D5ue.n.g5qzo6km8T/MJrK7up0ndppXUqg56tG', NULL, '2021-11-11 18:47:05', '2021-11-14 07:39:33'),
+(66, 'Đỗ Thị Mỹ Linh', 'avatar.png', 'mylinh1004@mail.ru', 'INACTIVE', NULL, '$2y$10$M79nBgJOUEVAxE45oyQO/O8xtZs9brPyZfcdNq2Ek6P7tLWJ8bkRC', NULL, '2022-03-18 08:35:53', '2022-03-19 10:49:49'),
+(67, 'Vương Hùng Dũng', 'avatar.png', 'dungvh79@gmail.com', 'INACTIVE', NULL, '$2y$10$Qoom9pS6ujNZExAT3KZH2eA/i/geOFS2CtG6jG5WjPqpf8SLW9Rde', NULL, '2022-03-18 08:35:54', '2022-03-18 08:35:54'),
+(68, 'Le Dinh Cuong', 'avatar.png', 'mail@ledinhcuong.com', 'INACTIVE', NULL, '$2y$10$ksieJTIefpNiahMba3Sd4OIYHJCa24iQe1DcuDcgJgNeeHRsPmZ8a', NULL, '2022-03-18 08:35:54', '2022-03-18 14:26:37');
 
 --
 -- Indexes for dumped tables
@@ -456,7 +460,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `candidates`
@@ -504,7 +508,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
