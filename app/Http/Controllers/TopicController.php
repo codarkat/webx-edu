@@ -25,7 +25,7 @@ class TopicController extends Controller
         if($topic->save()){
             $data = $request->all();
             $data['num_question'] = 0;
-            $data['status'] = 'ACTIVE';
+            $data['status'] = 'INACTIVE';
             $data['id'] = $topic->id;
             return response()->json([
                 'code' => 1,
@@ -83,13 +83,15 @@ class TopicController extends Controller
         ]);
     }
 
-    public function activeTopics(){
+    public function getActiveTopics(){
         $topics = Topic::where('status', StatusEnum::ACTIVE)
             ->where('num_question', '>', 0)->get();
         return response()->json([
             'topics' =>$topics
         ]);
     }
+
+
 
     public function getTopicDetails(Request $request, $id){
         if ($request->ajax()) {
@@ -102,6 +104,9 @@ class TopicController extends Controller
                             <a type="button" class="btn btn-danger ajax-delete-question" data-id="'.$question->id.'"><i class="material-icons">delete_outline</i>Xóa</a>
                     ';
                 })
+                ->editColumn('content', function ($question) {
+                    return $question->content;
+                })
                 ->editColumn('status', function ($question) {
                     if($question->status == StatusEnum::ACTIVE){
                         return '<span class="badge badge-success">Mở</span>';
@@ -109,7 +114,7 @@ class TopicController extends Controller
                         return '<span class="badge badge-danger">Đóng</span>';
                     }
                 })
-                ->rawColumns(['status','action'])
+                ->rawColumns(['content', 'status','action'])
                 ->make(true);
         }
     }

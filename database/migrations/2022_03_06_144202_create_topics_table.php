@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('num_question');
             $table->string('deadline');
             $table->string('duration');
-            $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
+            $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('INACTIVE');
             $table->timestamps();
         });
     }

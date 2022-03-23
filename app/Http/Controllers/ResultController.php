@@ -46,7 +46,8 @@ class ResultController extends Controller
                 $isCorrect = false;
                 if($data['answer_'.$data['question_id_'.$i]] != ''){
                     $q = Answer::where('question_id',$data['question_id_'.$i])->first();
-                    if($q->answer == $data['answer_'.$data['question_id_'.$i]]){
+//                    if($q->answer == $data['answer_'.$data['question_id_'.$i]]){
+                    if(in_array($data['answer_'.$data['question_id_'.$i]], json_decode($q->answer), true)){
                         $isCorrect = true;
                         $answer = $data['answer_'.$data['question_id_'.$i]];
                         $num_correct++;
@@ -122,6 +123,7 @@ class ResultController extends Controller
         $result_user->num_incorrect = $num_incorrect;
         $result_user->result = json_encode($result);
         $result_user->status = 'FINISHED';
+        $result_user->data = json_encode($data);
         if($result_user->save()){
             return redirect()->route('user.list-results');
         }else{

@@ -72,6 +72,7 @@ Route::prefix('topic')->name('topic.')->group(function () {
         [TopicController::class, 'delete']
     )->name('delete');
 
+
     Route::get(
         '/get-topic/{id}',
         [TopicController::class, 'getTopic']
@@ -84,7 +85,7 @@ Route::prefix('topic')->name('topic.')->group(function () {
 
     Route::get(
         '/get-active-topics',
-        [TopicController::class, 'activeTopics']
+        [TopicController::class, 'getActiveTopics']
     )->name('get-active-topics');
 });
 
@@ -168,10 +169,10 @@ Route::controller(SubscribeController::class)->middleware(['auth:web'])->group(f
 Route::prefix('admin')->name('admin.')->group(function (){
     Route::middleware(['auth:admin', 'PreventBrowserBackHistory'])->group(function (){
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
-        Route::get( 'dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/topic-details/topic-id-{id}', [AdminController::class, 'topicDetails'])->name('topic-details');
         Route::get('/list-results', [AdminController::class, 'listResults'])->name('list-results');
-        Route::get( '/result/{user_id}/{topic_id}', [AdminController::class, 'result'])->name('result');
+        Route::get('/result/{user_id}/{topic_id}', [AdminController::class, 'result'])->name('result');
     });
 
     Route::middleware(['guest:admin', 'PreventBrowserBackHistory'])->group(function (){

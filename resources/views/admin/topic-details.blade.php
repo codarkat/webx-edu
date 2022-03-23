@@ -120,10 +120,56 @@
     </div>
 @endsection
 @section('script')
+    <script src="https://cdn.ckeditor.com/ckeditor5/33.0.0/classic/ckeditor.js"></script>
     <script>
 
         let table, row_clicked;
         let body = $('body');
+
+
+        let cContent, eContent;
+
+        ClassicEditor
+            .create( document.querySelector( '#question-content' ), {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' }
+                    ]
+                }
+            } )
+            .then( newContent => {
+                cContent = newContent;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+
+        ClassicEditor
+            .create( document.querySelector( '#e-question-content' ), {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' }
+                    ]
+                }
+            } )
+            .then( editContent => {
+                eContent = editContent;
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
 
         //Listen event onclick from button edit
         body.on('click', '.ajax-edit-question', function () {
@@ -132,7 +178,8 @@
             let url = '{{ route("question.get-question", ":id") }}';
             url = url.replace(':id', id );
             $.get(url, function (data) {
-                $('#e-question-content').val(data.question.content);
+                // $('#e-question-content').val(atob(data.question.content));
+                eContent.setData(data.question.content);
                 $('#e-question-type').val(data.question.type);
                 $('#e-question-status').val(data.question.status).change();
                 $('#e-question-id').val(id);
@@ -195,10 +242,20 @@
                     $('#e-answer').html(html)
                     $('#e-radio-'+answer).prop('checked', true);
                 } else if (data.question.type === 'FORM') {
+                    let arrayAnswers = JSON.parse(data.answer.answer);
+                    let html_answer = "";
+                    $.each(arrayAnswers, function( index, answer ) {
+                        let isLastElement = index == arrayAnswers.length -1;
+                        if (isLastElement) {
+                            html_answer += answer
+                        } else {
+                            html_answer += answer + "; ";
+                        }
+                    });
                     $('#e-answer').html(`
                         <div class="mb-3">
                             <label for="e-answer_text" class="form-label">Answer</label>
-                            <input type="text" class="form-control" id="e-answer_text" name="e-answer_text" value="`+ data.answer.answer +`">
+                            <input type="text" class="form-control" id="e-answer_text" name="e-answer_text" value="`+ html_answer +`">
                         </div>
                     `)
                 }
@@ -279,7 +336,8 @@
         });
 
         function updateQuestion(){
-            if($('#e-question-content').val() == ""){
+            // if($('#e-question-content').val() == ""){
+            if(eContent.getData() == ""){
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -287,7 +345,8 @@
                 })
             } else {
                 let id = $('#e-question-id').val();
-                let content = $('#e-question-content').val();
+                // let content = $('#e-question-content').val();
+                let content = eContent.getData()
                 let type = $('#e-question-type').val();
                 let status = $('#e-question-status option:selected').val();
                 if($('#e-question-type').val() == 'FORM'){
@@ -298,12 +357,13 @@
                             text: 'Vui lòng điền đáp án!'
                         })
                     } else {
+                        let array_answer = $('#e-answer_text').val().split(";").map(answer => answer.trim());
                         let data = {
                             id: id,
                             content: content,
                             type: type,
                             status: status,
-                            answer: $('#e-answer_text').val()
+                            answer: array_answer
                         }
                         ajaxUpdateQuestion(data)
                     }
@@ -463,7 +523,9 @@
 
         //CREATE QUESTION
         function createQuestion(){
-            if($('#question-content').val() == ""
+            if(
+                // $('#question-content').val() == ""
+                cContent.getData() == ""
                 || $('#question-type option:selected').val() == "Select type of question"
             ){
                 Swal.fire({
@@ -472,7 +534,8 @@
                     text: 'Vui lòng điền nội dung câu hỏi!'
                 })
             } else {
-                let content = $('#question-content').val();
+                // let content = $('#question-content').val();
+                let content = cContent.getData();
                 let type = $('#question-type').val();
                 let topic_id = $('#topic-id').val();
                 if($('#question-type option:selected').val() == 'FORM'){
@@ -483,11 +546,12 @@
                             text: 'Vui lòng điền đáp án!'
                         })
                     } else {
+                        let array_answer = $('#answer_text').val().split(";").map(answer => answer.trim());
                         let data = {
                             content: content,
                             type: type,
                             topic_id: topic_id,
-                            answer: $('#answer_text').val()
+                            answer: array_answer
                         }
                         ajaxCreateQuestion(data)
                     }

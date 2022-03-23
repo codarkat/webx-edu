@@ -17,6 +17,7 @@
 [1. Global Styles]
 ------------------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,700;0,900;1,100;1,300;1,700;1,900&display=swap');
 
 html, body {
     font-size: 14px;
@@ -62,7 +63,7 @@ menu {
 }
 
 body, span, text, a {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 a:hover, a:active, a:focus {
@@ -95,7 +96,7 @@ b, strong, .bold {
 /* Headings */
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Divider */
@@ -1101,7 +1102,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #40475c;
     font-size: 12px;
     opacity: .35;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .accordion-menu>li>ul ul {
@@ -6120,7 +6121,7 @@ span.flatpickr-weekday {
     color: #40475c;
     font-size: 12px;
     opacity: .35;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .todo-menu .todo-status-filter li a {

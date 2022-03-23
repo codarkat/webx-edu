@@ -30,7 +30,7 @@ class QuestionController extends Controller
                 $topic->num_question += 1;
                 $topic->save();
                 $answer = new Answer();
-                if($request->input('type') == 'MULTIPLE_CHOICE'){
+                if($request->input('type') == 'MULTIPLE_CHOICE' || $request->input('type') == 'FORM'){
                     $answer->answer = json_encode($request->input('answer'));
                 } else {
                     $answer->answer = $request->input('answer');
@@ -69,7 +69,11 @@ class QuestionController extends Controller
         $question->status = $request->input('status');
         if($question->save()){
             $answer = Answer::where('question_id', $id)->first();
-            $answer->answer = $request->input('answer');
+            if($request->input('type') == 'MULTIPLE_CHOICE' || $request->input('type') == 'FORM'){
+                $answer->answer = json_encode($request->input('answer'));
+            } else {
+                $answer->answer = $request->input('answer');
+            }
             if($request->input('option_answer') !== null) {
                 $answer->option_answer = json_encode($request->input('option_answer'));
             }

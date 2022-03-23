@@ -84,7 +84,7 @@
                                     <h5 class="card-title">Câu {{$index+1}} <span id="text-result-{{$q->id}}"></span></h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-description" style="white-space:pre">{{$q->content}}</p>
+                                    <p class="card-description" style="white-space:pre">{!! $q->content !!}</p>
                                     <div class="example-container" id="bd-result-{{$q->id}}">
                                         @if($q->type == 'CHOICE')
                                             <div class="example-code" id="bg-result-{{$q->id}}">
@@ -269,7 +269,17 @@
                 let answer = data.answer.answer;
                 $('#radio-'+id+'-'+answer).prop('checked', true);
             } else if (data.question.type === 'FORM') {
-                $('#answer-'+id).val(data.answer.answer);
+                let arrayAnswers = JSON.parse(data.answer.answer);
+                let html_answer = "";
+                $.each(arrayAnswers, function( index, answer ) {
+                    let isLastElement = index == arrayAnswers.length -1;
+                    if (isLastElement) {
+                        html_answer += answer
+                    } else {
+                        html_answer += answer + "; ";
+                    }
+                });
+                $('#answer-'+id).val(html_answer);
             }
         })
     }

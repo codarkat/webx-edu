@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('num_incorrect')->nullable();
             $table->enum('status', ['PROCESSING', 'FINISHED'])->default('PROCESSING');
             $table->longText('result')->nullable();
+            $table->longText('data')->nullable();
             $table->timestamps();
         });
     }
