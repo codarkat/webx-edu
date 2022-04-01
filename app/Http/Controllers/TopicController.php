@@ -21,7 +21,7 @@ class TopicController extends Controller
         $topic->deadline = $request->input('deadline');
         $topic->duration = $request->input('duration');
         $topic->num_question = 0;
-        $topic->status = 'ACTIVE';
+        $topic->status = 'INACTIVE';
         if($topic->save()){
             $data = $request->all();
             $data['num_question'] = 0;
