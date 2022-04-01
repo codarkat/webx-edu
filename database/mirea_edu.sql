@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 23, 2022 at 08:56 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.10
+-- Host: 127.0.0.1:3306
+-- Generation Time: Apr 01, 2022 at 10:46 PM
+-- Server version: 10.5.12-MariaDB-cll-lve
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mireaedu`
+-- Database: `u305683932_mirea_edu`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `answers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `answer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `option_answer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `option_answer` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `question_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -60,7 +60,7 @@ INSERT INTO `answers` (`id`, `answer`, `option_answer`, `question_id`, `created_
 
 CREATE TABLE `questions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `topic_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` enum('CHOICE','FORM','MULTIPLE_CHOICE') COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` enum('ACTIVE','INACTIVE') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ACTIVE',
@@ -122,7 +122,8 @@ INSERT INTO `results` (`id`, `topic_id`, `user_id`, `num_correct`, `num_incorrec
 (42, '5', '40', '9', '1', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":\"4\",\"isCorrect\":true},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":\"3\",\"isCorrect\":true},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":\"132\",\"isCorrect\":true},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":\"\\u0445\\u043e\\u0442\\u044f\",\"isCorrect\":true},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":\"xin l\\u1ed7i\",\"isCorrect\":true},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":\"ghi b\\u00e0n\",\"isCorrect\":false},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":\"\\u043e\\u0432\\u043e\\u0449\\u0438\",\"isCorrect\":true}]', NULL, '2022-03-19 20:21:24', '2022-03-19 20:30:42'),
 (43, '5', '51', '6', '4', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":\"4\",\"isCorrect\":true},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":\"3\",\"isCorrect\":true},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":\"132\",\"isCorrect\":true},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":\"\\u043f\\u043e\\u0442\\u043e\\u043c\\u0443 \\u0447\\u0442\\u043e\",\"isCorrect\":false},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":\"xin l\\u00f5i\",\"isCorrect\":false},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":\"ghi b\\u00e0n (m\\u1eb7c k\\u1ec7 m\\u1ed9t vi\\u1ec7c g\\u00ec \\u0111\\u00f3 )\",\"isCorrect\":false},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":\"\\u043e\\u0432\\u043e\\u0449\\u044c\",\"isCorrect\":false}]', NULL, '2022-03-19 20:24:06', '2022-03-19 20:31:00'),
 (44, '5', '52', '9', '1', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":\"4\",\"isCorrect\":true},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":\"3\",\"isCorrect\":true},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":\"132\",\"isCorrect\":true},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":\"\\u0435\\u0441\\u043b\\u0438\",\"isCorrect\":false},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":\"xin l\\u1ed7i\",\"isCorrect\":true},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":\"m\\u1eb7c k\\u1ec7\",\"isCorrect\":true},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":\"\\u043e\\u0432\\u043e\\u0449\\u0438\",\"isCorrect\":true}]', NULL, '2022-03-19 20:24:39', '2022-03-19 20:32:30'),
-(45, '5', '66', '0', '10', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false}]', NULL, '2022-03-19 20:26:14', '2022-03-19 20:41:34');
+(45, '5', '66', '0', '10', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":null,\"isCorrect\":false}]', NULL, '2022-03-19 20:26:14', '2022-03-19 20:41:34'),
+(47, '5', '98', '6', '4', 'FINISHED', '[{\"question_id\":\"7\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"8\",\"question_type\":\"CHOICE\",\"answer\":\"4\",\"isCorrect\":true},{\"question_id\":\"9\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"10\",\"question_type\":\"CHOICE\",\"answer\":\"1\",\"isCorrect\":true},{\"question_id\":\"11\",\"question_type\":\"CHOICE\",\"answer\":\"3\",\"isCorrect\":true},{\"question_id\":\"12\",\"question_type\":\"FORM\",\"answer\":\"132\",\"isCorrect\":true},{\"question_id\":\"13\",\"question_type\":\"FORM\",\"answer\":\"\\u0421\\u0435\\u0439\\u0447\\u0430\\u0441\",\"isCorrect\":false},{\"question_id\":\"14\",\"question_type\":\"FORM\",\"answer\":\"x\\u1ea3 r\\u00e1c\",\"isCorrect\":false},{\"question_id\":\"15\",\"question_type\":\"FORM\",\"answer\":\"Qu\\u00ean\",\"isCorrect\":false},{\"question_id\":\"16\",\"question_type\":\"FORM\",\"answer\":\"\\u0424\\u0440\\u0443\\u043a\\u0442\\u044b\",\"isCorrect\":false}]', '{\"_token\":\"SyOurqDs3HSbhFvIROG29GjSZH9HhX7IVWEievOB\",\"topic_id\":\"5\",\"num_question\":\"10\",\"user_id\":\"98\",\"question_id_1\":\"7\",\"question_type_1\":\"CHOICE\",\"option_answer_7\":\"1\",\"question_id_2\":\"8\",\"question_type_2\":\"CHOICE\",\"option_answer_8\":\"4\",\"question_id_3\":\"9\",\"question_type_3\":\"CHOICE\",\"option_answer_9\":\"1\",\"question_id_4\":\"10\",\"question_type_4\":\"CHOICE\",\"option_answer_10\":\"1\",\"question_id_5\":\"11\",\"question_type_5\":\"CHOICE\",\"option_answer_11\":\"3\",\"question_id_6\":\"12\",\"question_type_6\":\"FORM\",\"answer_12\":\"132\",\"question_id_7\":\"13\",\"question_type_7\":\"FORM\",\"answer_13\":\"\\u0421\\u0435\\u0439\\u0447\\u0430\\u0441\",\"question_id_8\":\"14\",\"question_type_8\":\"FORM\",\"answer_14\":\"x\\u1ea3 r\\u00e1c\",\"question_id_9\":\"15\",\"question_type_9\":\"FORM\",\"answer_15\":\"Qu\\u00ean\",\"question_id_10\":\"16\",\"question_type_10\":\"FORM\",\"answer_16\":\"\\u0424\\u0440\\u0443\\u043a\\u0442\\u044b\"}', '2022-03-27 12:26:28', '2022-03-27 12:32:02');
 
 -- --------------------------------------------------------
 
@@ -157,7 +158,9 @@ INSERT INTO `subscribes` (`id`, `topic_id`, `user_id`, `created_at`, `updated_at
 (25, '5', '67', '2022-03-19 20:20:20', '2022-03-19 20:20:20'),
 (26, '5', '40', '2022-03-19 20:21:10', '2022-03-19 20:21:10'),
 (27, '5', '51', '2022-03-19 20:24:01', '2022-03-19 20:24:01'),
-(28, '5', '52', '2022-03-19 20:24:34', '2022-03-19 20:24:34');
+(28, '5', '52', '2022-03-19 20:24:34', '2022-03-19 20:24:34'),
+(30, '5', '42', '2022-03-27 12:10:43', '2022-03-27 12:10:43'),
+(31, '5', '98', '2022-03-27 12:26:23', '2022-03-27 12:26:23');
 
 -- --------------------------------------------------------
 
@@ -226,31 +229,31 @@ ALTER TABLE `topics`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `results`
 --
 ALTER TABLE `results`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `subscribes`
 --
 ALTER TABLE `subscribes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `topics`
 --
 ALTER TABLE `topics`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
