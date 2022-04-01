@@ -254,7 +254,7 @@
                                 let url = '{{ route("admin.topic-details", ":id") }}';
                                 url = url.replace(':id', data.data.id );
                                 let newTopicHTML = `
-                                <div class="card widget widget-popular-blog bg-success" id="card-topic-`+ data.data.id +`">
+                                <div class="card widget widget-popular-blog bg-danger" id="card-topic-`+ data.data.id +`">
                                     <div class="card-body">
                                         <div class="widget-popular-blog-container">
                                             <div class="widget-popular-blog-image">
@@ -274,7 +274,7 @@
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <ul class="list-group list-group-flush">
-                                                                        <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill badge-success" id="topic-status-`+ data.data.id +`">`+ data.data.status +`</span></li>
+                                                                        <li class="list-group-item">Trạng thái: <span class="badge badge-style-light rounded-pill badge-danger" id="topic-status-`+ data.data.id +`">`+ data.data.status +`</span></li>
                                                                         <li class="list-group-item">Số lượng câu hỏi: <span class="badge badge-style-light rounded-pill badge-info" id="topic-num-question-`+ data.data.id +`">`+ data.data.num_question +`</span></li>
                                                                         <li class="list-group-item">Thời gian làm bài: <span class="badge badge-style-light rounded-pill badge-info" id="topic-duration-`+ data.data.id +`">`+ data.data.duration +` Phút</span></li>
                                                                     </ul>
