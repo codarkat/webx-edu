@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::connection('mysql_edu')->create('answers', function (Blueprint $table) {
             $table->id();
             $table->string('answer');
-            $table->string('option_answer')->nullable();
+            $table->longText('option_answer')->nullable();
             $table->string('question_id');
             $table->timestamps();
         });
