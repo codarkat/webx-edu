@@ -371,8 +371,8 @@
                                 $('#topic-description-'+ data.data.id).html(data.data.description);
                                 $('#topic-deadline-'+ data.data.id).html(data.data.deadline);
                                 $('#topic-status-'+ data.data.id).html(data.data.status);
-                                $('#topic-num-question-'+ data.data.id).html(data.data.num_question + ` Phút`);
-                                $('#topic-duration-'+ data.data.id).html(data.data.duration);
+                                $('#topic-num-question-'+ data.data.id).html(data.data.num_question);
+                                $('#topic-duration-'+ data.data.id).html(data.data.duration + ` Phút`);
 
                                 if(data.data.status == 'ACTIVE'){
                                     $('#card-topic-'+ data.data.id).removeClass('bg-danger');
